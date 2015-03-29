@@ -1,9 +1,0 @@
-C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\bin\x86\Debug\DataManger.exe.config
-C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\bin\x86\Debug\DataManger.exe
-C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\bin\x86\Debug\DataManger.pdb
-C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\obj\x86\Debug\DataManger.csprojResolveAssemblyReference.cache
-C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\obj\x86\Debug\DataManger.DataManager_form.resources
-C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\obj\x86\Debug\DataManger.Properties.Resources.resources
-C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\obj\x86\Debug\DataManger.csproj.GenerateResource.Cache
-C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\obj\x86\Debug\DataManger.exe
-C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\obj\x86\Debug\DataManger.pdb
