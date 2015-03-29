@@ -1,0 +1,11 @@
+C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\bin\Debug\DataManger.exe.config
+C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\obj\Debug\DataManger.csprojResolveAssemblyReference.cache
+C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\obj\Debug\DataManger.Properties.Resources.resources
+C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\obj\Debug\DataManger.csproj.GenerateResource.Cache
+C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\bin\Debug\DataManger.exe
+C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\bin\Debug\DataManger.pdb
+C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\bin\Debug\System.Data.SQLite.dll
+C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\bin\Debug\System.Data.SQLite.pdb
+C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\obj\Debug\DataManger.exe
+C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\obj\Debug\DataManger.pdb
+C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\obj\Debug\DataManger.DataManager.resources
