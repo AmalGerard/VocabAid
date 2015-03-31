@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net;
+using System.Xml;
+using System.IO;
 
 namespace DataManger
 {
@@ -19,10 +22,10 @@ namespace DataManger
 
         private void DataManager_form_Load(object sender, EventArgs e)
         {
+            // TODO: This line of code loads data into the 'CurrentDataSet.Words' table. You can move, or remove it, as needed.
+            this.wordsTableAdapter.Fill(this.CurrentDataSet.Words);
             // TODO: This line of code loads data into the 'CurrentDataSet.WordList' table. You can move, or remove it, as needed.
             this.wordListTableAdapter.Fill(this.CurrentDataSet.WordList);
-            // TODO: This line of code loads data into the 'CurrentDataSet.Words' table. You can move, or remove it, as needed.
-            this.wordsTA.Fill(this.CurrentDataSet.Words);
             // TODO: This line of code loads data into the 'CurrentDataSet.Synonyms' table. You can move, or remove it, as needed.
             this.synonymsTableAdapter.Fill(this.CurrentDataSet.Synonyms);
             // TODO: This line of code loads data into the 'CurrentDataSet.Meanings' table. You can move, or remove it, as needed.
@@ -36,12 +39,7 @@ namespace DataManger
 
             splitContainer1.Panel2Collapsed = true;
             ShowHidePanel_btn.Text = ">>>";
-            this.ClientSize = new System.Drawing.Size(449, 561);
-
-        }
-
-        private void AddWord_btn_Click(object sender, EventArgs e)
-        {
+            this.ClientSize = new System.Drawing.Size(449, 800);
 
         }
 
@@ -124,7 +122,12 @@ namespace DataManger
                     Words_lbx.ClearSelected();
                     Word_tbx.Tag = null;
                     Words_lbx.Tag = null;
+                    ParseXML(Word_tbx.Text);
                 }
+            }
+            else if (e.KeyCode == Keys.Enter & Word_tbx.Text !="")
+            {
+                ParseXML(Word_tbx.Text);
             }
         }
 
@@ -149,14 +152,27 @@ namespace DataManger
             {
                 splitContainer1.Panel2Collapsed = false;
                 ShowHidePanel_btn.Text = "<<<";
-                this.ClientSize = new System.Drawing.Size(1008, 561);
+                this.ClientSize = new System.Drawing.Size(1280, 800);
             }
             else
             {
                 splitContainer1.Panel2Collapsed = true;
                 ShowHidePanel_btn.Text = ">>>";
-                this.ClientSize = new System.Drawing.Size(449, 561);
+                this.ClientSize = new System.Drawing.Size(449, 800);
             }
+        }
+
+        public void ParseXML(string queryWord)
+        {
+            WebClient wc = new WebClient();
+            String xml = wc.DownloadString("http://en.wiktionary.org/w/api.php?format=json&action=query&titles="+queryWord+"&prop=revisions&rvprop=content");
+            using (XmlReader reader = XmlReader.Create(new StringReader(xml)))
+            {
+                
+            }
+            //XmlDocument xmlDoc = new XmlDocument();
+            //xmlDoc.LoadXml(xml);
+            webBrowser1.Navigate("http://en.wiktionary.org/w/index.php?title="+queryWord+"&printable=yes#English");
         }
     }
 }
