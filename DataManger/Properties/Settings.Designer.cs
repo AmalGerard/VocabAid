@@ -33,5 +33,16 @@ namespace DataManger.Properties {
                 return ((string)(this["MainDBConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("data source=\"C:\\Users\\Daniel\\Documents\\Visual Studio 2013\\Projects\\VocabAid\\WikiW" +
+            "ordExtracts.db\"")]
+        public string WikiWordExtractsConnectionString {
+            get {
+                return ((string)(this["WikiWordExtractsConnectionString"]));
+            }
+        }
     }
 }
