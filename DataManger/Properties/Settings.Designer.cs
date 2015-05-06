@@ -26,8 +26,19 @@ namespace DataManger.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("data source=\"C:\\Users\\Daniel\\Documents\\Visual Studio 2013\\Projects\\VocabAid\\MainD" +
-            "B.db\"")]
+        [global::System.Configuration.DefaultSettingValueAttribute("data source=\"C:\\Users\\Daniel\\Documents\\Visual Studio 2013\\Projects\\VocabAid\\DataM" +
+            "anger\\Data\\SCOWL_Words.db\";useutf16encoding=True;use utf-16 encoding=True")]
+        public string SCOWL_WordsConnectionString {
+            get {
+                return ((string)(this["SCOWL_WordsConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("data source=\"C:\\Users\\Daniel\\Documents\\Visual Studio 2013\\Projects\\VocabAid\\DataM" +
+            "anger\\Data\\MainDB.db\";useutf16encoding=True;foreign keys=True")]
         public string MainDBConnectionString {
             get {
                 return ((string)(this["MainDBConnectionString"]));
@@ -37,8 +48,8 @@ namespace DataManger.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("data source=\"C:\\Users\\Daniel\\Documents\\Visual Studio 2013\\Projects\\VocabAid\\WikiW" +
-            "ordExtracts.db\"")]
+        [global::System.Configuration.DefaultSettingValueAttribute("data source=\"C:\\Users\\Daniel\\Documents\\Visual Studio 2013\\Projects\\VocabAid\\DataM" +
+            "anger\\Data\\WikiWordExtracts.db\";useutf16encoding=True;foreign keys=True")]
         public string WikiWordExtractsConnectionString {
             get {
                 return ((string)(this["WikiWordExtractsConnectionString"]));

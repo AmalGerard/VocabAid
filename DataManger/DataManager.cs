@@ -23,6 +23,8 @@ namespace DataManger
 
         private void DataManager_form_Load(object sender, EventArgs e)
         {
+            // TODO: This line of code loads data into the 'sCOWL_WordsDataSet.Words' table. You can move, or remove it, as needed.
+            this.wordsSuggestTableAdapter.Fill(this.sCOWL_WordsDataSet.Words);
             // TODO: This line of code loads data into the 'wikiWordExtractsDataSet.Antonyms' table. You can move, or remove it, as needed.
             this.antonymsTableAdapterWWE.Fill(this.wikiWordExtractsDataSet.Antonyms);
             // TODO: This line of code loads data into the 'wikiWordExtractsDataSet.Synonyms' table. You can move, or remove it, as needed.
@@ -34,13 +36,13 @@ namespace DataManger
             // TODO: This line of code loads data into the 'CurrentDataSet.Examples' table. You can move, or remove it, as needed.
             this.examplesTableAdapter.Fill(this.CurrentDataSet.Examples);
             // TODO: This line of code loads data into the 'wikiWordExtractsDataSet.Antonyms' table. You can move, or remove it, as needed.
-            this.antonymsTableAdapterWWE.Fill(this.wikiWordExtractsDataSet.Antonyms);
+            //this.antonymsTableAdapterWWE.Fill(this.wikiWordExtractsDataSet.Antonyms);
             // TODO: This line of code loads data into the 'wikiWordExtractsDataSet.Synonyms' table. You can move, or remove it, as needed.
-            this.synonymsTableAdapterWWE.Fill(this.wikiWordExtractsDataSet.Synonyms);
+            //this.synonymsTableAdapterWWE.Fill(this.wikiWordExtractsDataSet.Synonyms);
             // TODO: This line of code loads data into the 'wikiWordExtractsDataSet.Examples' table. You can move, or remove it, as needed.
             this.examplesTableAdapterWWE.Fill(this.wikiWordExtractsDataSet.Examples);
             // TODO: This line of code loads data into the 'wikiWordExtractsDataSet.Meanings' table. You can move, or remove it, as needed.
-            this.meaningsTableAdapterWWE.Fill(this.wikiWordExtractsDataSet.Meanings);
+            //this.meaningsTableAdapterWWE.Fill(this.wikiWordExtractsDataSet.Meanings);
             // TODO: This line of code loads data into the 'wikiWordExtractsDataSet.PoS' table. You can move, or remove it, as needed.
             this.posTableAdapterWWE.Fill(this.wikiWordExtractsDataSet.PoS);
             // TODO: This line of code loads data into the 'CurrentDataSet.Words' table. You can move, or remove it, as needed.
@@ -56,7 +58,9 @@ namespace DataManger
             // TODO: This line of code loads data into the 'CurrentDataSet.PoS' table. You can move, or remove it, as needed.
             this.posTA.Fill(this.CurrentDataSet.PoS);
 
-            PoS_cbx.SelectedItem = null;
+            PoS_cbx.SelectedIndex = -1;
+            Meanings_lbx.DataSource = null;
+
             //splitContainer1.Panel2Collapsed = true;
             //ShowHidePanel_btn.Text = ">>>";
             //this.ClientSize = new System.Drawing.Size(449, 800);
@@ -65,6 +69,7 @@ namespace DataManger
 
         private void Word_tbx_TextChanged(object sender, EventArgs e)
         {
+            Word_tbx.BackColor = Color.White;
             if (Word_tbx.Text != "")
             {
                 string lastChar = Word_tbx.Text.Substring(Word_tbx.Text.Length - 1, 1);
@@ -75,10 +80,11 @@ namespace DataManger
                 }
                 if (Convert.ToInt16(Words_lbx.Tag)!=1)
                 {
-                    Words_lbx.Visible = false;
-                    wordsBindingSource.Filter = "Word Like '" + Word_tbx.Text + "%'";
-                    wordsBindingSource.Sort = "Word";
-                    if (wordsBindingSource.Count == 0)
+                    //Words_lbx.Visible = false;
+                    wordsSuggestBindingSource.Filter = "Word Like '" + Word_tbx.Text + "%'";
+                    
+                    //wordsSuggestBindingSource.Sort = "Word";
+                    if (wordsSuggestBindingSource.Count == 0)
                     {
                         Words_lbx.Visible = false;
                         Words_lbx.ClearSelected();
@@ -142,53 +148,22 @@ namespace DataManger
                 }
                 else if (e.KeyCode == Keys.Enter)
                 {
-                    Word_tbx.SelectionStart = Word_tbx.Text.Length;
-                    Word_tbx.SelectionLength = 0;
-                    Words_lbx.Visible = false;
-                    Words_lbx.ClearSelected();
-                    Word_tbx.Tag = null;
-                    Words_lbx.Tag = null;
-                    Meaning_tbx.Text = "";
-                    //srcMeanings_lbx.Items.Clear();
-                    Example_tbx.Text = "";
-                    //srcExamples_lbx.Items.Clear();
-                    poSBindingSource.Filter = null;
-                    //srcSynonyms_lbx.Items.Clear();
-                    //srcAntonyms_lbx.Items.Clear();
-                    //poSBindingSource.ResetBindings(false);
-                    srcWord_lbl.Text = Word_tbx.Text;
-                    clearTempDB();
-                    ParseXML(Word_tbx.Text);
-                    srcSynonyms_lbx.ClearSelected();
-                    srcAntonyms_lbx.ClearSelected();
-                    srcMeanings_lbx.ClearSelected();
-                    srcExamples_lbx.ClearSelected();
-
+                    string temp = Word_tbx.Text.ToLower();
+                    preQuery();
+                    srcWord_lbl.Text = temp;
+                    //clearTempDB();
+                    retrieveWordData(temp);
+                    ParseXML(temp);
                 }
             }
-            else if (e.KeyCode == Keys.Enter & Word_tbx.Text !="")
+            else if (e.KeyCode == Keys.Enter & Word_tbx.Text != "")
             {
-                Word_tbx.SelectionStart = Word_tbx.Text.Length;
-                Word_tbx.SelectionLength = 0;
-                Words_lbx.Visible = false;
-                Words_lbx.ClearSelected();
-                Word_tbx.Tag = null;
-                Words_lbx.Tag = null;
-                Meaning_tbx.Text = "";
-                //srcMeanings_lbx.Items.Clear();
-                Example_tbx.Text = "";
-                //srcExamples_lbx.Items.Clear();
-                poSBindingSource.Filter = null;
-                //srcSynonyms_lbx.Items.Clear();
-                //srcAntonyms_lbx.Items.Clear();
-                //poSBindingSource.ResetBindings(false);
-                srcWord_lbl.Text = Word_tbx.Text;
-                clearTempDB();
-                ParseXML(Word_tbx.Text);
-                srcSynonyms_lbx.ClearSelected();
-                srcAntonyms_lbx.ClearSelected();
-                srcMeanings_lbx.ClearSelected();
-                srcExamples_lbx.ClearSelected();
+                string temp = Word_tbx.Text.ToLower();
+                preQuery();
+                srcWord_lbl.Text = temp;
+                //clearTempDB();
+                retrieveWordData(temp);
+                ParseXML(temp);
             }
         }
 
@@ -223,11 +198,65 @@ namespace DataManger
             }
         }
 
-        public void ParseXML(string queryWord)
+        private void preQuery()
         {
+            Word_tbx.SelectionStart = Word_tbx.Text.Length;
+            Word_tbx.SelectionLength = 0;
+            Words_lbx.Visible = false;
+            Words_lbx.ClearSelected();
+            Word_tbx.Tag = null;
+            Words_lbx.Tag = null;
+            Meaning_tbx.Text = "";
+            //srcMeanings_lbx.Items.Clear();
+            Example_tbx.Text = "";
+            
+            //srcExamples_lbx.Items.Clear();
+            poSBindingSource.Filter = null;
+            //srcSynonyms_lbx.Items.Clear();
+            //srcAntonyms_lbx.Items.Clear();
+            //poSBindingSource.ResetBindings(false);
+            
+        }
+
+        private void retrieveWordData(string queryWord)
+        {
+            int index = wordsBindingSource.Find("Word", Word_tbx.Text);
+            int _Word_ID = 0;
+            //int _WordList_ID = 0;
+            if (index > -1)
+            {
+                MainDBDataSet.WordsRow wordRow = (MainDBDataSet.WordsRow)CurrentDataSet.Words.Select("Word ='" + Word_tbx.Text + "'", "Word")[0];
+                Word_tbx.Tag = wordRow.ID;
+                Word_tbx.BackColor = Color.PaleTurquoise;
+               /* if (wordRow.HasMeaning == 1)
+                {
+                    Word_tbx.BackColor = Color.PaleTurquoise;
+                }
+                else
+                {
+                    Word_tbx.BackColor = Color.White;
+                }*/
+            }
+            /*PoS_cbx.DataSource = null;
+            PoS_cbx.DataSource = poSBindingSource;
+            PoS_cbx.DisplayMember = "PoS";
+            PoS_cbx.ValueMember = "ID";
+            /*DataRow[] posRows = meaningsTableAdapter.GetData().Select("Word_ID=" + (long)Word_tbx.Tag, "Word_ID");
+            //int posID = (int)posTable.Rows[0]["Pos_ID"];
+            bool first = true;
+            foreach (DataRow posRow in posRows)
+            {
+                long pos = (long)posRow["PoS_ID"];
+                
+            }*/
+        }
+
+        private void ParseXML(string queryWord)
+        {
+            clearTempDB();
             srcMeanings_lbx.HorizontalExtent = 1500;
             srcExamples_lbx.HorizontalExtent = 1500;
-            srcExamples_lbx.HorizontalExtent = 700;
+            srcSynonyms_lbx.HorizontalExtent = 700;
             srcAntonyms_lbx.HorizontalExtent = 700;
             string pos = "";
             WebClient wc = new WebClient();
@@ -277,6 +306,8 @@ namespace DataManger
                 reader.MoveToFirstAttribute();
                 if (reader.Value == "English")
                 {
+                    //Meaning_tbx.Enabled = false;
+                    //Example_tbx.Enabled = false;
                     while (reader.ReadToFollowing("h3"))
                     {
                         //reader.ReadToFollowing("h3");
@@ -402,6 +433,7 @@ namespace DataManger
                                 else if (innerReader.Name == "li" & !innerReader.IsStartElement())
                                 {
                                     //srcSynonyms_lbx.Items.Add(tempSyn);
+                                    
                                     srcPoS_cbx.SelectedIndex = srcPoS_cbx.FindString(pos);
                                     WikiWordExtractsDataSet.SynonymsRow SynRow = wikiWordExtractsDataSet.Synonyms.NewSynonymsRow();
                                     SynRow.Synonym = tempSyn;
@@ -450,13 +482,42 @@ namespace DataManger
                     //xmlDoc.LoadXml(xml);
                     //srcMeanings_lbx.Tag = null;
                     //srcExamples_lbx.Tag = null;
-                    srcMeanings_lbx.HorizontalExtent = 0;
-                    srcExamples_lbx.HorizontalExtent = 0;
+
+                    //Meaning_tbx.Enabled = true;
+                    //Example_tbx.Enabled = true;
                 }
                 webBrowser1.Navigate("http://en.wiktionary.org/w/index.php?title=" + queryWord + "&printable=yes#English");
             }
+            //srcPoS_cbx.DataSource = poSBindingSourceWWE;
+            //srcPoS_cbx.DisplayMember = "PoS";
+            //srcPoS_cbx.ValueMember = "ID";
+            if (srcPoS_cbx.Items.Count > 0)
+            {
+                srcPoS_cbx.SelectedIndex = 0;
+            }
+            srcMeanings_lbx.DataSource = meaningsBindingSourceWWE;
+            srcMeanings_lbx.DisplayMember = "Meaning";
+            srcMeanings_lbx.ValueMember = "Meaning";
+            srcMeanings_lbx.ClearSelected();
+            srcExamples_lbx.DataSource = examplesBindingSourceWWE;
+            srcExamples_lbx.DisplayMember = "Example";
+            srcExamples_lbx.ValueMember = "Example";
+            srcExamples_lbx.ClearSelected();
+            srcSynonyms_lbx.DataSource = synonymsBindingSourceWWE;
+            srcSynonyms_lbx.DisplayMember = "Synonym";
+            srcSynonyms_lbx.ValueMember = "Synonym";
+            srcSynonyms_lbx.ClearSelected();
+            srcAntonyms_lbx.DataSource = antonymsBindingSourceWWE;
+            srcAntonyms_lbx.DisplayMember = "Antonym";
+            srcAntonyms_lbx.ValueMember = "Antonym";
+            srcAntonyms_lbx.ClearSelected();
+            srcMeanings_lbx.HorizontalExtent = 0;
+            srcExamples_lbx.HorizontalExtent = 0;
+            srcSynonyms_lbx.HorizontalExtent = 0;
+            srcAntonyms_lbx.HorizontalExtent = 0;
+            PoS_cbx.SelectedIndex = -1;
         }
-        public void readPoSContent(XmlReader reader, string pos)
+        private void readPoSContent(XmlReader reader, string pos)
         {
             int index = poSBindingSourceWWE.Find("PoS", pos);
             long posID = 1;
@@ -514,6 +575,7 @@ namespace DataManger
                         tempEx = tempEx.Replace("\n", ": ");
                         tempEx = tempEx.Replace(": :", ":");
                         tempEx = tempEx.Replace("::", ":");
+                        tempEx = tempEx.Replace(",:", ":");
                         tempEx.Trim();
                         if (tempEx != "")
                         {
@@ -593,6 +655,8 @@ namespace DataManger
                 tempMean = tempMean.Replace(".;", ".");
                 tempMean = tempMean.Replace("?;", "?");
                 tempMean = tempMean.Replace("!;", "!");
+                tempMean = tempMean.Replace(":;", ":");
+                tempMean = tempMean.Replace(",:", ":");
                 tempMean = tempMean.Trim();
                 /*if (srcMeanings_lbx.Tag == null)
                 {
@@ -621,7 +685,7 @@ namespace DataManger
 
         private void clearTempDB()
         {
-            foreach (WikiWordExtractsDataSet.MeaningsRow _meanRow in wikiWordExtractsDataSet.Meanings.Rows)
+            /*foreach (WikiWordExtractsDataSet.MeaningsRow _meanRow in wikiWordExtractsDataSet.Meanings.Rows)
             {
                 _meanRow.Delete();
             }
@@ -640,13 +704,32 @@ namespace DataManger
             foreach (WikiWordExtractsDataSet.PoSRow _posRow in wikiWordExtractsDataSet.PoS.Rows)
             {
                 _posRow.Delete();
-            }
-            meaningsTableAdapterWWE.Update(wikiWordExtractsDataSet);
+            }*/
+            //srcPoS_cbx.DataSource = null;
+            srcMeanings_lbx.DataSource = null;
+            srcExamples_lbx.DataSource = null;
+            srcSynonyms_lbx.DataSource = null;
+            srcAntonyms_lbx.DataSource = null;
+            examplesTableAdapterWWE.Delete();
+            meaningsTableAdapterWWE.Delete();
+            synonymsTableAdapterWWE.Delete();
+            antonymsTableAdapterWWE.Delete();
+            posTableAdapterWWE.Delete();
+            posTableAdapterWWE.Fill(wikiWordExtractsDataSet.PoS);
+            meaningsTableAdapterWWE.Fill(wikiWordExtractsDataSet.Meanings);
+            examplesTableAdapterWWE.Fill(wikiWordExtractsDataSet.Examples);
+            synonymsTableAdapterWWE.Fill(wikiWordExtractsDataSet.Synonyms);
+            antonymsTableAdapterWWE.Fill(wikiWordExtractsDataSet.Antonyms);
+            /*meaningsTableAdapterWWE.Update(wikiWordExtractsDataSet);
             examplesTableAdapterWWE.Update(wikiWordExtractsDataSet);
             synonymsTableAdapterWWE.Update(wikiWordExtractsDataSet);
             antonymsTableAdapterWWE.Update(wikiWordExtractsDataSet);
             posTableAdapterWWE.Update(wikiWordExtractsDataSet);
-
+            srcPoS_cbx.DataBindings.Clear();
+            srcMeanings_lbx.DataBindings.Clear();
+            srcExamples_lbx.DataBindings.Clear();
+            srcSynonyms_lbx.DataBindings.Clear();
+            srcAntonyms_lbx.DataBindings.Clear();*/
         }
 
         private void sourceMeanings_lbx_SelectedIndexChanged(object sender, EventArgs e)
@@ -675,7 +758,112 @@ namespace DataManger
 
         private void NewMeaning_btn_Click(object sender, EventArgs e)
         {
+            if (NewMeaning_btn.Text == "Save")
+            {
+                MainDBDataSet.MeaningsRow MeanRow = CurrentDataSet.Meanings.FindByID((long)Meaning_tbx.Tag);
+                MeanRow.BeginEdit();
+                MeanRow.Meaning = Meaning_tbx.Text.Trim();
+                MeanRow.PoS_ID = (long)PoS_cbx.SelectedValue;
+                if (WordList_cbx.SelectedIndex == 0)
+                {
+                    MainDBDataSet.WordListRow newWordList = CurrentDataSet.WordList.NewWordListRow();
+                    newWordList.ListName = NewWordList_tbx.Text.Trim();
+                    if (IsSpecial_chk.Checked == true)
+                    {
+                        newWordList.IsSpecial = 1;
+                    }
+                    else
+                    {
+                        newWordList.IsSpecial = 0;
+                    }
+                    CurrentDataSet.WordList.AddWordListRow(newWordList);
+                    wordListTableAdapter.Update(newWordList);
+                    MeanRow.WList_ID = (long)newWordList.ID;
+                    newWordList = null;
+                }
+                else
+                {
+                    MeanRow.WList_ID = (long)(WordList_cbx.SelectedValue);
+                }
+                MeanRow.EndEdit();
+                meaningsTableAdapter.Update(MeanRow);
+                MeanRow = null;
 
+            }
+            else
+            {
+                if (WordList_cbx.SelectedIndex == 0 & NewWordList_tbx.Text == "")
+                {
+                    MessageBox.Show("Please enter a new List Name or choose one from the dropdown list", "Missing List Name", MessageBoxButtons.OK);
+                }
+                else if (PoS_cbx.SelectedIndex < 0)
+                {
+                    MessageBox.Show("Please select a Part of Speech", "Missing Part of Speech", MessageBoxButtons.OK);
+                }
+                else
+                {
+                    int index = wordsBindingSource.Find("Word", Word_tbx.Text);
+                    int _Word_ID = 0;
+                    int _WordList_ID = 0;
+                    if (index > -1)
+                    {
+                        MainDBDataSet.WordsRow wordRow = (MainDBDataSet.WordsRow)CurrentDataSet.Words.Select("Word ='" + Word_tbx.Text + "'", "Word")[0];
+                        _Word_ID = (int)wordRow.ID;
+                        wordRow.BeginEdit();
+                        //wordRow.HasMeaning = 1;
+                        wordRow.EndEdit();
+                        wordsTableAdapter.Update(wordRow);
+                        wordRow = null;
+                    }
+                    else
+                    {
+                        MainDBDataSet.WordsRow newWordRow = CurrentDataSet.Words.NewWordsRow();
+                        newWordRow.Word = Word_tbx.Text.Trim();
+                        newWordRow.Alphabet = Word_tbx.Text.Trim().Substring(0, 1);
+                        //newWordRow.HasMeaning = 1;
+                        CurrentDataSet.Words.AddWordsRow(newWordRow);
+                        wordsTableAdapter.Update(newWordRow);
+                        _Word_ID = (int)newWordRow.ID;
+                        newWordRow = null;
+                    }
+
+                    if (WordList_cbx.SelectedIndex == 0)
+                    {
+                        MainDBDataSet.WordListRow newWordList = CurrentDataSet.WordList.NewWordListRow();
+                        newWordList.ListName = NewWordList_tbx.Text.Trim();
+                        if (IsSpecial_chk.Checked == true)
+                        {
+                            newWordList.IsSpecial = 1;
+                        }
+                        else
+                        {
+                            newWordList.IsSpecial = 0;
+                        }
+                        CurrentDataSet.WordList.AddWordListRow(newWordList);
+                        wordListTableAdapter.Update(newWordList);
+                        _WordList_ID = (int)newWordList.ID;
+                        newWordList = null;
+                    }
+                    else
+                    {
+                        _WordList_ID = Convert.ToInt32(WordList_cbx.SelectedValue);
+                    }
+
+                    MainDBDataSet.MeaningsRow newMeanRow = CurrentDataSet.Meanings.NewMeaningsRow();
+                    newMeanRow.Meaning = Meaning_tbx.Text.Trim();
+                    newMeanRow.Word_ID = (long)_Word_ID;
+                    newMeanRow.PoS_ID = Convert.ToInt64(PoS_cbx.SelectedValue);
+                    newMeanRow.WList_ID = (long)_WordList_ID;
+                    CurrentDataSet.Meanings.AddMeaningsRow(newMeanRow);
+                    meaningsTableAdapter.Update(newMeanRow);
+                    newMeanRow = null;
+                }
+                
+            }
+            Meaning_tbx.Text = "";
+            Meanings_lbx.SelectedIndex = -1;
+            NewMeaning_btn.Text = "Add";
+            
         }
 
         private void DataManager_form_FormClosing(object sender, FormClosingEventArgs e)
@@ -721,5 +909,423 @@ namespace DataManger
                 Antonym_tbx.Text = "";
             }
         }
+
+        private void Meaning_tbx_TextChanged(object sender, EventArgs e)
+        {
+            if (Meaning_tbx.Text != "" & PoS_cbx.SelectedIndex > -1)
+            {
+                if (WordList_cbx.SelectedIndex == 0 & NewWordList_tbx.Text != "")
+                {
+                    NewMeaning_btn.Enabled = true;
+                }
+                else if (WordList_cbx.SelectedIndex > 0)
+                {
+                    NewMeaning_btn.Enabled = true;
+                }
+            }
+            else 
+            {
+                NewMeaning_btn.Enabled = false;
+            }
+        }
+
+        private void Example_tbx_TextChanged(object sender, EventArgs e)
+        {
+            if (Example_tbx.Text != "" & Meanings_lbx.SelectedIndex > -1)
+            {
+                NewExample_btn.Enabled = true;
+            }
+            else
+            {
+                NewExample_btn.Enabled = false;
+            }
+        }
+
+        private void Synonym_tbx_TextChanged(object sender, EventArgs e)
+        {
+            if (Synonym_tbx.Text != "" & Meanings_lbx.SelectedIndex > -1)
+            {
+                NewSynonym_btn.Enabled = true;
+            }
+            else
+            {
+                NewSynonym_btn.Enabled = false;
+            }
+        }
+
+        private void Antonym_tbx_TextChanged(object sender, EventArgs e)
+        {
+            if (Antonym_tbx.Text != "" & Meanings_lbx.SelectedIndex > -1)
+            {
+                NewAntonym_btn.Enabled = true;
+            }
+            else
+            {
+                NewAntonym_btn.Enabled = false;
+            }
+        }
+
+        private void NewWordList_tbx_TextChanged(object sender, EventArgs e)
+        {
+            if (NewWordList_tbx.Text != "")
+            {
+                IsSpecial_chk.Enabled = true;
+                /*if (Meaning_tbx.Text != "" & PoS_cbx.SelectedIndex > -1)
+                {
+                    NewMeaning_btn.Enabled = true;
+                }*/
+            }
+            else
+            {
+                IsSpecial_chk.Enabled = false;
+            }
+            if (WordList_cbx.SelectedIndex == 0 & NewWordList_tbx.Text == "")
+            {
+                NewMeaning_btn.Enabled = false;
+            }
+            else
+            {
+                NewMeaning_btn.Enabled = true;
+            }
+        }
+
+        private void AddWord_btn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void PoS_cbx_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Meaning_tbx.Text != "" & PoS_cbx.SelectedIndex > 0)
+            {
+                if (WordList_cbx.SelectedIndex == 0 & NewWordList_tbx.Text != "")
+                {
+                    NewMeaning_btn.Enabled = true;
+                }
+                else if (WordList_cbx.SelectedIndex > 0)
+                {
+                    NewMeaning_btn.Enabled = true;
+                }
+                
+            }
+            else if (PoS_cbx.SelectedIndex < 0)
+            {
+                NewMeaning_btn.Enabled = false;
+                Meanings_lbx.DataSource = null;
+                Examples_lbx.DataSource = null;
+                Synonyms_lbx.DataSource = null;
+                Antonyms_lbx.DataSource = null;
+            }
+            if (Word_tbx.Tag != null & PoS_cbx.SelectedIndex > -1)
+            {
+                meaningsBindingSource.Filter = "Word_ID=" + Word_tbx.Tag.ToString() + "AND PoS_ID =" + PoS_cbx.SelectedValue.ToString();
+                Meanings_lbx.DataSource = meaningsBindingSource;
+                Meanings_lbx.DisplayMember = "Meaning";
+                Meanings_lbx.ValueMember = "ID";
+                Meanings_lbx.ClearSelected();
+
+                Examples_lbx.DataSource = null;
+                Synonyms_lbx.DataSource = null;
+                Antonyms_lbx.DataSource = null;
+            }
+        }
+
+        private void WordList_cbx_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (WordList_cbx.SelectedIndex > -1)
+            {
+                if (WordList_cbx.SelectedIndex == 0)
+                {
+                    NewWordList_tbx.Enabled = true;
+                    if (NewWordList_tbx.Text == "")
+                    {
+                        NewMeaning_btn.Enabled = false;
+                    }
+                }
+                else
+                {
+                    NewWordList_tbx.Enabled = false;
+                    if (PoS_cbx.SelectedIndex > -1 & Word_tbx.Text != "" & Meaning_tbx.Text != "")
+                    {
+                        NewMeaning_btn.Enabled = true;
+                    }
+                }
+            }
+        }
+
+        private void Word_tbx_Leave(object sender, EventArgs e)
+        {
+            if (Word_tbx.Text != "")
+            {
+                string temp = Word_tbx.Text.ToLower();
+                preQuery();
+                retrieveWordData(temp);
+                PoS_cbx.SelectedIndex = -1;
+            }
+        }
+
+        private void DelMeaning_btn_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Do you want to delete this meaning?", "Confirm Delete", MessageBoxButtons.OKCancel);
+            if (result == DialogResult.OK)
+            {
+                MainDBDataSet.MeaningsRow MeanRow = CurrentDataSet.Meanings.FindByID((long)Meanings_lbx.SelectedValue);
+                MeanRow.Delete();
+                meaningsTableAdapter.Update(CurrentDataSet);
+                Meanings_lbx.SelectedIndex = -1;
+            }
+        }
+
+        private void Meanings_lbx_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Meanings_lbx.SelectedIndex > -1)
+            {
+                EditMeaning_btn.Enabled = true;
+                DelMeaning_btn.Enabled = true;
+                MainDBDataSet.MeaningsRow MeanRow = CurrentDataSet.Meanings.FindByID((long)Meanings_lbx.SelectedValue);
+                WordList_cbx.SelectedValue = MeanRow.WList_ID;
+                MeanRow = null;
+
+                examplesBindingSource.Filter = "Meaning_ID =" + (long)Meanings_lbx.SelectedValue;
+                Examples_lbx.DataSource = examplesBindingSource;
+                Examples_lbx.DisplayMember = "Example";
+                Examples_lbx.ValueMember = "ID";
+                Examples_lbx.SelectedIndex = -1;
+
+                synonymsBindingSource.Filter = "Meaning_ID =" + (long)Meanings_lbx.SelectedValue;
+                Synonyms_lbx.DataSource = synonymsBindingSource;
+                Synonyms_lbx.DisplayMember = "Synonym";
+                Synonyms_lbx.ValueMember = "ID";
+                Synonyms_lbx.SelectedIndex = -1;
+
+                antonymsBindingSource.Filter = "Meaning_ID =" + (long)Meanings_lbx.SelectedValue;
+                Antonyms_lbx.DataSource = antonymsBindingSource;
+                Antonyms_lbx.DisplayMember = "Antonym";
+                Antonyms_lbx.ValueMember = "ID";
+                Antonyms_lbx.SelectedIndex = -1;
+
+                if (Example_tbx.Text != "")
+                {
+                    NewExample_btn.Enabled = true;
+                }
+
+                if (Antonym_tbx.Text != "")
+                {
+                    NewAntonym_btn.Enabled = true;
+                }
+
+                if (Synonym_tbx.Text != "")
+                {
+                    NewSynonym_btn.Enabled = true;
+                }
+            }
+            else
+            {
+                EditMeaning_btn.Enabled = false;
+                DelMeaning_btn.Enabled = false;
+                NewExample_btn.Enabled = false;
+                NewSynonym_btn.Enabled = false;
+                NewAntonym_btn.Enabled = false;
+            }
+
+        }
+
+        private void EditMeaning_btn_Click(object sender, EventArgs e)
+        {
+            Meaning_tbx.Text = Meanings_lbx.Text;
+            Meaning_tbx.Tag = Meanings_lbx.SelectedValue;
+            NewMeaning_btn.Text = "Save";
+            NewMeaning_btn.Enabled = true;
+        }
+
+        private void NewExample_btn_Click(object sender, EventArgs e)
+        {
+            if (NewExample_btn.Text == "Save")
+            {
+                MainDBDataSet.ExamplesRow ExRow = CurrentDataSet.Examples.FindByID((long)Example_tbx.Tag);
+                ExRow.BeginEdit();
+                ExRow.Example = Example_tbx.Text;
+                ExRow.Meaning_ID = (long)Meanings_lbx.SelectedValue;
+                ExRow.EndEdit();
+                examplesTableAdapter.Update(ExRow);
+                ExRow = null;
+            }
+            else
+            {
+                MainDBDataSet.ExamplesRow ExRow = CurrentDataSet.Examples.NewExamplesRow();
+                ExRow.Example = Example_tbx.Text.Trim();
+                ExRow.Meaning_ID = (long)Meanings_lbx.SelectedValue;
+                CurrentDataSet.Examples.AddExamplesRow(ExRow);
+                examplesTableAdapter.Update(ExRow);
+                ExRow = null;
+            }
+            Example_tbx.Text = "";
+            Examples_lbx.SelectedIndex = -1;
+            NewExample_btn.Text = "Add";
+        }
+
+        private void Examples_lbx_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Examples_lbx.SelectedIndex > -1)
+            {
+                EditExample_btn.Enabled = true;
+                DelExample_btn.Enabled = true;
+            }
+            else
+            {
+                EditExample_btn.Enabled = false;
+                DelExample_btn.Enabled = false;
+            }
+        }
+
+        private void EditExample_btn_Click(object sender, EventArgs e)
+        {
+            Example_tbx.Text = Examples_lbx.Text;
+            Example_tbx.Tag = Examples_lbx.SelectedValue;
+            NewExample_btn.Text = "Save";
+            NewExample_btn.Enabled = true;
+        }
+
+        private void DelExample_btn_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Do you want to delete this example?", "Confirm Delete", MessageBoxButtons.OKCancel);
+            if (result == DialogResult.OK)
+            {
+                MainDBDataSet.ExamplesRow ExRow = CurrentDataSet.Examples.FindByID((long)Examples_lbx.SelectedValue);
+                ExRow.Delete();
+                examplesTableAdapter.Update(CurrentDataSet);
+                Examples_lbx.SelectedIndex = -1;
+            }
+        }
+
+        private void NewSynonym_btn_Click(object sender, EventArgs e)
+        {
+            
+            if (NewSynonym_btn.Text == "Save")
+            {
+                MainDBDataSet.SynonymsRow SynRow = CurrentDataSet.Synonyms.FindByID((long)Synonym_tbx.Tag);
+                SynRow.BeginEdit();
+                SynRow.Synonym = Synonym_tbx.Text.Trim();
+                SynRow.Meaning_ID = (long)Meanings_lbx.SelectedValue;
+                SynRow.EndEdit();
+                synonymsTableAdapter.Update(SynRow);
+                SynRow = null;
+                
+            }
+            else
+            {
+                MainDBDataSet.SynonymsRow SynRow = CurrentDataSet.Synonyms.NewSynonymsRow();
+                SynRow.Synonym = Synonym_tbx.Text.Trim();
+                SynRow.Meaning_ID = (long)Meanings_lbx.SelectedValue;
+                CurrentDataSet.Synonyms.AddSynonymsRow(SynRow);
+                synonymsTableAdapter.Update(SynRow);
+                SynRow = null;
+                
+            }
+            NewSynonym_btn.Text = "Add";
+            Synonym_tbx.Text = "";
+            Synonyms_lbx.SelectedIndex = -1;
+        }
+
+        private void EditSynonym_btn_Click(object sender, EventArgs e)
+        {
+            Synonym_tbx.Text = Synonyms_lbx.Text;
+            Synonym_tbx.Tag = Synonyms_lbx.SelectedValue;
+            NewSynonym_btn.Text = "Save";
+            NewSynonym_btn.Enabled = true;
+        }
+
+        private void DelSynonym_btn_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Do you want to delete this synonym?", "Confirm Delete", MessageBoxButtons.OKCancel);
+            if (result == DialogResult.OK)
+            {
+                MainDBDataSet.SynonymsRow SynRow = CurrentDataSet.Synonyms.FindByID((long)Synonyms_lbx.SelectedValue);
+                SynRow.Delete();
+                synonymsTableAdapter.Update(CurrentDataSet);
+                Synonyms_lbx.SelectedIndex = -1;
+            }
+        }
+
+        private void NewAntonym_btn_Click(object sender, EventArgs e)
+        {
+            if (NewAntonym_btn.Text == "Save")
+            {
+                MainDBDataSet.AntonymsRow AntRow = CurrentDataSet.Antonyms.FindByID((long)Antonym_tbx.Tag);
+                AntRow.BeginEdit();
+                AntRow.Antonym = Antonym_tbx.Text.Trim();
+                AntRow.Meaning_ID = (long)Meanings_lbx.SelectedValue;
+                AntRow.EndEdit();
+                antonymsTableAdapter.Update(AntRow);
+                AntRow = null;
+
+            }
+            else
+            {
+                MainDBDataSet.AntonymsRow AntRow = CurrentDataSet.Antonyms.NewAntonymsRow();
+                AntRow.Antonym = Antonym_tbx.Text.Trim();
+                AntRow.Meaning_ID = (long)Meanings_lbx.SelectedValue;
+                CurrentDataSet.Antonyms.AddAntonymsRow(AntRow);
+                antonymsTableAdapter.Update(AntRow);
+                AntRow = null;
+
+            }
+            NewAntonym_btn.Text = "Add";
+            Antonym_tbx.Text = "";
+            Antonyms_lbx.SelectedIndex = -1;
+        }
+
+        private void EditAntonym_btn_Click(object sender, EventArgs e)
+        {
+            Antonym_tbx.Text = Antonyms_lbx.Text;
+            Antonym_tbx.Tag = Antonyms_lbx.SelectedValue;
+            NewAntonym_btn.Text = "Save";
+            NewAntonym_btn.Enabled = true;
+        }
+
+        private void DelAntonym_btn_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Do you want to delete this Antonym?", "Confirm Delete", MessageBoxButtons.OKCancel);
+            if (result == DialogResult.OK)
+            {
+                MainDBDataSet.AntonymsRow AntRow = CurrentDataSet.Antonyms.FindByID((long)Antonyms_lbx.SelectedValue);
+                AntRow.Delete();
+                antonymsTableAdapter.Update(CurrentDataSet);
+                Antonyms_lbx.SelectedIndex = -1;
+            }
+        }
+
+        private void Synonyms_lbx_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Synonyms_lbx.SelectedIndex > -1)
+            {
+                EditSynonym_btn.Enabled = true;
+                DelSynonym_btn.Enabled = true;
+            }
+            else
+            {
+                EditSynonym_btn.Enabled = false;
+                DelSynonym_btn.Enabled = false;
+            }
+        }
+
+        private void Antonyms_lbx_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Antonyms_lbx.SelectedIndex > -1)
+            {
+                EditAntonym_btn.Enabled = true;
+                DelAntonym_btn.Enabled = true;
+            }
+            else
+            {
+                EditAntonym_btn.Enabled = false;
+                DelAntonym_btn.Enabled = false;
+            }
+        }
+
+        /*private void PoS_cbx_DrawItem(object sender, DrawItemEventArgs e)
+        {
+
+        }*/
     }
 }

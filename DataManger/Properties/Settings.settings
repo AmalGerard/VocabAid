@@ -2,21 +2,29 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DataManger.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
+    <Setting Name="SCOWL_WordsConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;data source="C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\Data\SCOWL_Words.db";useutf16encoding=True;use utf-16 encoding=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SQLite.EF6&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">data source="C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\Data\SCOWL_Words.db";useutf16encoding=True;use utf-16 encoding=True</Value>
+    </Setting>
     <Setting Name="MainDBConnectionString" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;data source="C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\MainDB.db"&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;data source="C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\Data\MainDB.db";useutf16encoding=True;foreign keys=True&lt;/ConnectionString&gt;
   &lt;ProviderName&gt;System.Data.SQLite.EF6&lt;/ProviderName&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">data source="C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\MainDB.db"</Value>
+      <Value Profile="(Default)">data source="C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\Data\MainDB.db";useutf16encoding=True;foreign keys=True</Value>
     </Setting>
     <Setting Name="WikiWordExtractsConnectionString" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;data source="C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\WikiWordExtracts.db"&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;data source="C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\Data\WikiWordExtracts.db";useutf16encoding=True;foreign keys=True&lt;/ConnectionString&gt;
   &lt;ProviderName&gt;System.Data.SQLite.EF6&lt;/ProviderName&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">data source="C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\WikiWordExtracts.db"</Value>
+      <Value Profile="(Default)">data source="C:\Users\Daniel\Documents\Visual Studio 2013\Projects\VocabAid\DataManger\Data\WikiWordExtracts.db";useutf16encoding=True;foreign keys=True</Value>
     </Setting>
   </Settings>
 </SettingsFile>
