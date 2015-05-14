@@ -35,6 +35,8 @@
             this.Meaning_tbx = new System.Windows.Forms.TextBox();
             this.PoS_lbl = new System.Windows.Forms.Label();
             this.PoS_cbx = new System.Windows.Forms.ComboBox();
+            this.poSBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.CurrentDataSet = new DataManger.MainDBDataSet();
             this.Example_lbl = new System.Windows.Forms.Label();
             this.Example_tbx = new System.Windows.Forms.TextBox();
             this.Syn3_tbx = new System.Windows.Forms.TextBox();
@@ -42,6 +44,8 @@
             this.Syn5_tbx = new System.Windows.Forms.TextBox();
             this.Syn6_tbx = new System.Windows.Forms.TextBox();
             this.Synonyms_gbx = new System.Windows.Forms.GroupBox();
+            this.Syn2_tbx = new System.Windows.Forms.TextBox();
+            this.Syn1_tbx = new System.Windows.Forms.TextBox();
             this.Ant1_tbx = new System.Windows.Forms.TextBox();
             this.Ant2_tbx = new System.Windows.Forms.TextBox();
             this.Ant3_tbx = new System.Windows.Forms.TextBox();
@@ -55,12 +59,7 @@
             this.AddWord_btn = new System.Windows.Forms.Button();
             this.NewWordList_tbx = new System.Windows.Forms.TextBox();
             this.NewWordList_btn = new System.Windows.Forms.Button();
-            this.Syn1_tbx = new System.Windows.Forms.TextBox();
-            this.Syn2_tbx = new System.Windows.Forms.TextBox();
-            this.wordsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.meaningsBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.CurrentDataSet = new DataManger.MainDBDataSet();
-            this.poSBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.posTA = new DataManger.MainDBDataSetTableAdapters.PoSTableAdapter();
             this.taManager = new DataManger.MainDBDataSetTableAdapters.TableAdapterManager();
             this.antonymsTableAdapter = new DataManger.MainDBDataSetTableAdapters.AntonymsTableAdapter();
@@ -70,14 +69,15 @@
             this.antonymsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.synonymsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.Words_lbx = new System.Windows.Forms.ListBox();
+            this.wordsBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.poSBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CurrentDataSet)).BeginInit();
             this.Synonyms_gbx.SuspendLayout();
             this.Antonym_gbx.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.wordsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.meaningsBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.CurrentDataSet)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.poSBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.antonymsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.synonymsBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.wordsBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // Word_lbl
@@ -132,6 +132,7 @@
             // PoS_cbx
             // 
             this.PoS_cbx.DataSource = this.poSBindingSource;
+            this.PoS_cbx.DisplayMember = "PoS";
             this.PoS_cbx.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.PoS_cbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PoS_cbx.FormattingEnabled = true;
@@ -140,6 +141,16 @@
             this.PoS_cbx.Size = new System.Drawing.Size(115, 28);
             this.PoS_cbx.TabIndex = 23;
             this.PoS_cbx.ValueMember = "ID";
+            // 
+            // poSBindingSource
+            // 
+            this.poSBindingSource.DataMember = "PoS";
+            this.poSBindingSource.DataSource = this.CurrentDataSet;
+            // 
+            // CurrentDataSet
+            // 
+            this.CurrentDataSet.DataSetName = "MainDBDataSet";
+            this.CurrentDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // Example_lbl
             // 
@@ -207,6 +218,22 @@
             this.Synonyms_gbx.TabIndex = 27;
             this.Synonyms_gbx.TabStop = false;
             this.Synonyms_gbx.Text = "Synonyms:";
+            // 
+            // Syn2_tbx
+            // 
+            this.Syn2_tbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Syn2_tbx.Location = new System.Drawing.Point(152, 25);
+            this.Syn2_tbx.Name = "Syn2_tbx";
+            this.Syn2_tbx.Size = new System.Drawing.Size(120, 26);
+            this.Syn2_tbx.TabIndex = 1;
+            // 
+            // Syn1_tbx
+            // 
+            this.Syn1_tbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Syn1_tbx.Location = new System.Drawing.Point(26, 25);
+            this.Syn1_tbx.Name = "Syn1_tbx";
+            this.Syn1_tbx.Size = new System.Drawing.Size(120, 26);
+            this.Syn1_tbx.TabIndex = 0;
             // 
             // Ant1_tbx
             // 
@@ -336,39 +363,9 @@
             this.NewWordList_btn.Text = "Add";
             this.NewWordList_btn.UseVisualStyleBackColor = true;
             // 
-            // Syn1_tbx
-            // 
-            this.Syn1_tbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Syn1_tbx.Location = new System.Drawing.Point(26, 25);
-            this.Syn1_tbx.Name = "Syn1_tbx";
-            this.Syn1_tbx.Size = new System.Drawing.Size(120, 26);
-            this.Syn1_tbx.TabIndex = 0;
-            // 
-            // Syn2_tbx
-            // 
-            this.Syn2_tbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Syn2_tbx.Location = new System.Drawing.Point(152, 25);
-            this.Syn2_tbx.Name = "Syn2_tbx";
-            this.Syn2_tbx.Size = new System.Drawing.Size(120, 26);
-            this.Syn2_tbx.TabIndex = 1;
-            // 
-            // wordsBindingSource
-            // 
-            this.wordsBindingSource.DataMember = "Words";
-            // 
             // meaningsBindingSource
             // 
             this.meaningsBindingSource.DataMember = "Meanings";
-            // 
-            // CurrentDataSet
-            // 
-            this.CurrentDataSet.DataSetName = "MainDBDataSet";
-            this.CurrentDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // poSBindingSource
-            // 
-            this.poSBindingSource.DataMember = "PoS";
-            this.poSBindingSource.DataSource = this.CurrentDataSet;
             // 
             // posTA
             // 
@@ -413,7 +410,6 @@
             // Words_lbx
             // 
             this.Words_lbx.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Words_lbx.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.meaningsBindingSource, "Word_ID", true));
             this.Words_lbx.DataSource = this.wordsBindingSource;
             this.Words_lbx.DisplayMember = "Word";
             this.Words_lbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -427,6 +423,11 @@
             this.Words_lbx.ValueMember = "ID";
             this.Words_lbx.Visible = false;
             this.Words_lbx.SelectedIndexChanged += new System.EventHandler(this.Words_lbx_SelectedIndexChanged);
+            // 
+            // wordsBindingSource
+            // 
+            this.wordsBindingSource.DataMember = "Words";
+            this.wordsBindingSource.DataSource = this.CurrentDataSet;
             // 
             // DataManager_form
             // 
@@ -453,16 +454,16 @@
             this.Name = "DataManager_form";
             this.Text = "Data Manager";
             this.Load += new System.EventHandler(this.DataManager_form_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.poSBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CurrentDataSet)).EndInit();
             this.Synonyms_gbx.ResumeLayout(false);
             this.Synonyms_gbx.PerformLayout();
             this.Antonym_gbx.ResumeLayout(false);
             this.Antonym_gbx.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.wordsBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.meaningsBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.CurrentDataSet)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.poSBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.antonymsBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.synonymsBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.wordsBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -500,7 +501,6 @@
         private System.Windows.Forms.Button AddWord_btn;
         private System.Windows.Forms.TextBox NewWordList_tbx;
         private System.Windows.Forms.Button NewWordList_btn;
-        private System.Windows.Forms.BindingSource wordsBindingSource;
         private System.Windows.Forms.BindingSource meaningsBindingSource;
         private MainDBDataSetTableAdapters.PoSTableAdapter posTA;
         private MainDBDataSetTableAdapters.TableAdapterManager taManager;
@@ -511,6 +511,7 @@
         private System.Windows.Forms.BindingSource antonymsBindingSource;
         private System.Windows.Forms.BindingSource synonymsBindingSource;
         private System.Windows.Forms.ListBox Words_lbx;
+        private System.Windows.Forms.BindingSource wordsBindingSource;
 
     }
 }

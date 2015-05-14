@@ -746,7 +746,7 @@ namespace DataManger {
             
             private global::System.Data.DataColumn columnMeaning;
             
-            private global::System.Data.DataColumn columnUsage;
+            private global::System.Data.DataColumn columnWList_ID;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -815,9 +815,9 @@ namespace DataManger {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn UsageColumn {
+            public global::System.Data.DataColumn WList_IDColumn {
                 get {
-                    return this.columnUsage;
+                    return this.columnWList_ID;
                 }
             }
             
@@ -858,14 +858,14 @@ namespace DataManger {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MeaningsRow AddMeaningsRow(long ID, WordsRow parentWordsRowByFK_Meanings_1_0, PoSRow parentPoSRowByFK_Meanings_0_0, string Meaning, string Usage) {
+            public MeaningsRow AddMeaningsRow(long ID, WordsRow parentWordsRowByFK_Meanings_1_0, PoSRow parentPoSRowByFK_Meanings_0_0, string Meaning, long WList_ID) {
                 MeaningsRow rowMeaningsRow = ((MeaningsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         ID,
                         null,
                         null,
                         Meaning,
-                        Usage};
+                        WList_ID};
                 if ((parentWordsRowByFK_Meanings_1_0 != null)) {
                     columnValuesArray[1] = parentWordsRowByFK_Meanings_1_0[0];
                 }
@@ -905,7 +905,7 @@ namespace DataManger {
                 this.columnWord_ID = base.Columns["Word_ID"];
                 this.columnPoS_ID = base.Columns["PoS_ID"];
                 this.columnMeaning = base.Columns["Meaning"];
-                this.columnUsage = base.Columns["Usage"];
+                this.columnWList_ID = base.Columns["WList_ID"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -919,8 +919,8 @@ namespace DataManger {
                 base.Columns.Add(this.columnPoS_ID);
                 this.columnMeaning = new global::System.Data.DataColumn("Meaning", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnMeaning);
-                this.columnUsage = new global::System.Data.DataColumn("Usage", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnUsage);
+                this.columnWList_ID = new global::System.Data.DataColumn("WList_ID", typeof(long), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnWList_ID);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnID}, true));
                 this.columnID.AllowDBNull = false;
@@ -929,7 +929,7 @@ namespace DataManger {
                 this.columnPoS_ID.AllowDBNull = false;
                 this.columnMeaning.AllowDBNull = false;
                 this.columnMeaning.MaxLength = 2147483647;
-                this.columnUsage.MaxLength = 2147483647;
+                this.columnWList_ID.AllowDBNull = false;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2031,17 +2031,12 @@ namespace DataManger {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Usage {
+            public long WList_ID {
                 get {
-                    try {
-                        return ((string)(this[this.tableMeanings.UsageColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Usage\' in table \'Meanings\' is DBNull.", e);
-                    }
+                    return ((long)(this[this.tableMeanings.WList_IDColumn]));
                 }
                 set {
-                    this[this.tableMeanings.UsageColumn] = value;
+                    this[this.tableMeanings.WList_IDColumn] = value;
                 }
             }
             
@@ -2065,18 +2060,6 @@ namespace DataManger {
                 set {
                     this.SetParentRow(value, this.Table.ParentRelations["FK_Meanings_1_0"]);
                 }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsUsageNull() {
-                return this.IsNull(this.tableMeanings.UsageColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetUsageNull() {
-                this[this.tableMeanings.UsageColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2977,11 +2960,13 @@ namespace DataManger.MainDBDataSetTableAdapters {
             tableMapping.ColumnMappings.Add("Word_ID", "Word_ID");
             tableMapping.ColumnMappings.Add("PoS_ID", "PoS_ID");
             tableMapping.ColumnMappings.Add("Meaning", "Meaning");
-            tableMapping.ColumnMappings.Add("Usage", "Usage");
+            tableMapping.ColumnMappings.Add("WList_ID", "WList_ID");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [main].[sqlite_default_schema].[Meanings] WHERE (([ID] = @Original_ID) AND ([Word_ID] = @Original_Word_ID) AND ([PoS_ID] = @Original_PoS_ID) AND ([Meaning] = @Original_Meaning) AND ((@IsNull_Usage = 1 AND [Usage] IS NULL) OR ([Usage] = @Original_Usage)))";
+            this._adapter.DeleteCommand.CommandText = "DELETE FROM [main].[sqlite_default_schema].[Meanings] WHERE (([ID] = @Original_ID" +
+                ") AND ([Word_ID] = @Original_Word_ID) AND ([PoS_ID] = @Original_PoS_ID) AND ([Me" +
+                "aning] = @Original_Meaning) AND ([WList_ID] = @Original_WList_ID))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             global::System.Data.SQLite.SQLiteParameter param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_ID";
@@ -3011,23 +2996,16 @@ namespace DataManger.MainDBDataSetTableAdapters {
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.DeleteCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@IsNull_Usage";
-            param.DbType = global::System.Data.DbType.Int32;
-            param.DbType = global::System.Data.DbType.Int32;
-            param.SourceColumn = "Usage";
-            param.SourceVersion = global::System.Data.DataRowVersion.Original;
-            param.SourceColumnNullMapping = true;
-            this._adapter.DeleteCommand.Parameters.Add(param);
-            param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@Original_Usage";
-            param.DbType = global::System.Data.DbType.String;
-            param.SourceColumn = "Usage";
+            param.ParameterName = "@Original_WList_ID";
+            param.DbType = global::System.Data.DbType.Int64;
+            param.DbType = global::System.Data.DbType.Int64;
+            param.SourceColumn = "WList_ID";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.DeleteCommand.Parameters.Add(param);
             this._adapter.InsertCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
             this._adapter.InsertCommand.CommandText = "INSERT INTO [main].[sqlite_default_schema].[Meanings] ([ID], [Word_ID], [PoS_ID]," +
-                " [Meaning], [Usage]) VALUES (@ID, @Word_ID, @PoS_ID, @Meaning, @Usage)";
+                " [Meaning], [WList_ID]) VALUES (@ID, @Word_ID, @PoS_ID, @Meaning, @WList_ID)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@ID";
@@ -3053,13 +3031,14 @@ namespace DataManger.MainDBDataSetTableAdapters {
             param.SourceColumn = "Meaning";
             this._adapter.InsertCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@Usage";
-            param.DbType = global::System.Data.DbType.String;
-            param.SourceColumn = "Usage";
+            param.ParameterName = "@WList_ID";
+            param.DbType = global::System.Data.DbType.Int64;
+            param.DbType = global::System.Data.DbType.Int64;
+            param.SourceColumn = "WList_ID";
             this._adapter.InsertCommand.Parameters.Add(param);
             this._adapter.UpdateCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [main].[sqlite_default_schema].[Meanings] SET [ID] = @ID, [Word_ID] = @Word_ID, [PoS_ID] = @PoS_ID, [Meaning] = @Meaning, [Usage] = @Usage WHERE (([ID] = @Original_ID) AND ([Word_ID] = @Original_Word_ID) AND ([PoS_ID] = @Original_PoS_ID) AND ([Meaning] = @Original_Meaning) AND ((@IsNull_Usage = 1 AND [Usage] IS NULL) OR ([Usage] = @Original_Usage)))";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [main].[sqlite_default_schema].[Meanings] SET [ID] = @ID, [Word_ID] = @Word_ID, [PoS_ID] = @PoS_ID, [Meaning] = @Meaning, [WList_ID] = @WList_ID WHERE (([ID] = @Original_ID) AND ([Word_ID] = @Original_Word_ID) AND ([PoS_ID] = @Original_PoS_ID) AND ([Meaning] = @Original_Meaning) AND ([WList_ID] = @Original_WList_ID))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@ID";
@@ -3085,9 +3064,10 @@ namespace DataManger.MainDBDataSetTableAdapters {
             param.SourceColumn = "Meaning";
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@Usage";
-            param.DbType = global::System.Data.DbType.String;
-            param.SourceColumn = "Usage";
+            param.ParameterName = "@WList_ID";
+            param.DbType = global::System.Data.DbType.Int64;
+            param.DbType = global::System.Data.DbType.Int64;
+            param.SourceColumn = "WList_ID";
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_ID";
@@ -3117,17 +3097,10 @@ namespace DataManger.MainDBDataSetTableAdapters {
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@IsNull_Usage";
-            param.DbType = global::System.Data.DbType.Int32;
-            param.DbType = global::System.Data.DbType.Int32;
-            param.SourceColumn = "Usage";
-            param.SourceVersion = global::System.Data.DataRowVersion.Original;
-            param.SourceColumnNullMapping = true;
-            this._adapter.UpdateCommand.Parameters.Add(param);
-            param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@Original_Usage";
-            param.DbType = global::System.Data.DbType.String;
-            param.SourceColumn = "Usage";
+            param.ParameterName = "@Original_WList_ID";
+            param.DbType = global::System.Data.DbType.Int64;
+            param.DbType = global::System.Data.DbType.Int64;
+            param.SourceColumn = "WList_ID";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.UpdateCommand.Parameters.Add(param);
         }
@@ -3145,7 +3118,7 @@ namespace DataManger.MainDBDataSetTableAdapters {
             this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[1];
             this._commandCollection[0] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT [ID], [Word_ID], [PoS_ID], [Meaning], [Usage] FROM [Meanings]";
+            this._commandCollection[0].CommandText = "SELECT ID, Word_ID, PoS_ID, Meaning, WList_ID FROM Meanings";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -3206,7 +3179,7 @@ namespace DataManger.MainDBDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
-        public virtual int Delete(long Original_ID, long Original_Word_ID, long Original_PoS_ID, string Original_Meaning, string Original_Usage) {
+        public virtual int Delete(long Original_ID, long Original_Word_ID, long Original_PoS_ID, string Original_Meaning, long Original_WList_ID) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((long)(Original_ID));
             this.Adapter.DeleteCommand.Parameters[1].Value = ((long)(Original_Word_ID));
             this.Adapter.DeleteCommand.Parameters[2].Value = ((long)(Original_PoS_ID));
@@ -3216,14 +3189,7 @@ namespace DataManger.MainDBDataSetTableAdapters {
             else {
                 this.Adapter.DeleteCommand.Parameters[3].Value = ((string)(Original_Meaning));
             }
-            if ((Original_Usage == null)) {
-                this.Adapter.DeleteCommand.Parameters[4].Value = ((object)(1));
-                this.Adapter.DeleteCommand.Parameters[5].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.DeleteCommand.Parameters[4].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[5].Value = ((string)(Original_Usage));
-            }
+            this.Adapter.DeleteCommand.Parameters[4].Value = ((long)(Original_WList_ID));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -3244,7 +3210,7 @@ namespace DataManger.MainDBDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(long ID, long Word_ID, long PoS_ID, string Meaning, string Usage) {
+        public virtual int Insert(long ID, long Word_ID, long PoS_ID, string Meaning, long WList_ID) {
             this.Adapter.InsertCommand.Parameters[0].Value = ((long)(ID));
             this.Adapter.InsertCommand.Parameters[1].Value = ((long)(Word_ID));
             this.Adapter.InsertCommand.Parameters[2].Value = ((long)(PoS_ID));
@@ -3254,12 +3220,7 @@ namespace DataManger.MainDBDataSetTableAdapters {
             else {
                 this.Adapter.InsertCommand.Parameters[3].Value = ((string)(Meaning));
             }
-            if ((Usage == null)) {
-                this.Adapter.InsertCommand.Parameters[4].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.InsertCommand.Parameters[4].Value = ((string)(Usage));
-            }
+            this.Adapter.InsertCommand.Parameters[4].Value = ((long)(WList_ID));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -3280,7 +3241,7 @@ namespace DataManger.MainDBDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(long ID, long Word_ID, long PoS_ID, string Meaning, string Usage, long Original_ID, long Original_Word_ID, long Original_PoS_ID, string Original_Meaning, string Original_Usage) {
+        public virtual int Update(long ID, long Word_ID, long PoS_ID, string Meaning, long WList_ID, long Original_ID, long Original_Word_ID, long Original_PoS_ID, string Original_Meaning, long Original_WList_ID) {
             this.Adapter.UpdateCommand.Parameters[0].Value = ((long)(ID));
             this.Adapter.UpdateCommand.Parameters[1].Value = ((long)(Word_ID));
             this.Adapter.UpdateCommand.Parameters[2].Value = ((long)(PoS_ID));
@@ -3290,12 +3251,7 @@ namespace DataManger.MainDBDataSetTableAdapters {
             else {
                 this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(Meaning));
             }
-            if ((Usage == null)) {
-                this.Adapter.UpdateCommand.Parameters[4].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(Usage));
-            }
+            this.Adapter.UpdateCommand.Parameters[4].Value = ((long)(WList_ID));
             this.Adapter.UpdateCommand.Parameters[5].Value = ((long)(Original_ID));
             this.Adapter.UpdateCommand.Parameters[6].Value = ((long)(Original_Word_ID));
             this.Adapter.UpdateCommand.Parameters[7].Value = ((long)(Original_PoS_ID));
@@ -3305,14 +3261,7 @@ namespace DataManger.MainDBDataSetTableAdapters {
             else {
                 this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(Original_Meaning));
             }
-            if ((Original_Usage == null)) {
-                this.Adapter.UpdateCommand.Parameters[9].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[10].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[9].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[10].Value = ((string)(Original_Usage));
-            }
+            this.Adapter.UpdateCommand.Parameters[9].Value = ((long)(Original_WList_ID));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -3333,8 +3282,8 @@ namespace DataManger.MainDBDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(long Word_ID, long PoS_ID, string Meaning, string Usage, long Original_ID, long Original_Word_ID, long Original_PoS_ID, string Original_Meaning, string Original_Usage) {
-            return this.Update(Original_ID, Word_ID, PoS_ID, Meaning, Usage, Original_ID, Original_Word_ID, Original_PoS_ID, Original_Meaning, Original_Usage);
+        public virtual int Update(long Word_ID, long PoS_ID, string Meaning, long WList_ID, long Original_ID, long Original_Word_ID, long Original_PoS_ID, string Original_Meaning, long Original_WList_ID) {
+            return this.Update(Original_ID, Word_ID, PoS_ID, Meaning, WList_ID, Original_ID, Original_Word_ID, Original_PoS_ID, Original_Meaning, Original_WList_ID);
         }
     }
     
