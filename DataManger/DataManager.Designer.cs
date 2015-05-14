@@ -458,7 +458,6 @@
             this.Synonyms_lbx.ItemHeight = 20;
             this.Synonyms_lbx.Location = new System.Drawing.Point(101, 477);
             this.Synonyms_lbx.Name = "Synonyms_lbx";
-            this.Synonyms_lbx.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.Synonyms_lbx.Size = new System.Drawing.Size(120, 84);
             this.Synonyms_lbx.TabIndex = 17;
             this.Synonyms_lbx.SelectedIndexChanged += new System.EventHandler(this.Synonyms_lbx_SelectedIndexChanged);
@@ -502,7 +501,6 @@
             this.Antonyms_lbx.ItemHeight = 20;
             this.Antonyms_lbx.Location = new System.Drawing.Point(101, 567);
             this.Antonyms_lbx.Name = "Antonyms_lbx";
-            this.Antonyms_lbx.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.Antonyms_lbx.Size = new System.Drawing.Size(120, 84);
             this.Antonyms_lbx.TabIndex = 22;
             this.Antonyms_lbx.SelectedIndexChanged += new System.EventHandler(this.Antonyms_lbx_SelectedIndexChanged);

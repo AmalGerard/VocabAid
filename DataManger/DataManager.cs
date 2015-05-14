@@ -209,7 +209,8 @@ namespace DataManger
             Meaning_tbx.Text = "";
             //srcMeanings_lbx.Items.Clear();
             Example_tbx.Text = "";
-            
+            Synonym_tbx.Text = "";
+            Antonym_tbx.Text = "";
             //srcExamples_lbx.Items.Clear();
             poSBindingSource.Filter = null;
             //srcSynonyms_lbx.Items.Clear();
@@ -221,7 +222,7 @@ namespace DataManger
         private void retrieveWordData(string queryWord)
         {
             int index = wordsBindingSource.Find("Word", Word_tbx.Text);
-            int _Word_ID = 0;
+            //int _Word_ID = 0;
             //int _WordList_ID = 0;
             if (index > -1)
             {
@@ -780,6 +781,8 @@ namespace DataManger
                     wordListTableAdapter.Update(newWordList);
                     MeanRow.WList_ID = (long)newWordList.ID;
                     newWordList = null;
+                    NewWordList_tbx.Text = "";
+                    WordList_cbx.SelectedIndex = WordList_cbx.Items.Count - 1;
                 }
                 else
                 {
@@ -843,6 +846,8 @@ namespace DataManger
                         wordListTableAdapter.Update(newWordList);
                         _WordList_ID = (int)newWordList.ID;
                         newWordList = null;
+                        NewWordList_tbx.Text = "";
+                        WordList_cbx.SelectedIndex = WordList_cbx.Items.Count - 1;
                     }
                     else
                     {
@@ -852,6 +857,7 @@ namespace DataManger
                     MainDBDataSet.MeaningsRow newMeanRow = CurrentDataSet.Meanings.NewMeaningsRow();
                     newMeanRow.Meaning = Meaning_tbx.Text.Trim();
                     newMeanRow.Word_ID = (long)_Word_ID;
+                    Word_tbx.Tag = newMeanRow.Word_ID;
                     newMeanRow.PoS_ID = Convert.ToInt64(PoS_cbx.SelectedValue);
                     newMeanRow.WList_ID = (long)_WordList_ID;
                     CurrentDataSet.Meanings.AddMeaningsRow(newMeanRow);
@@ -861,8 +867,12 @@ namespace DataManger
                 
             }
             Meaning_tbx.Text = "";
-            Meanings_lbx.SelectedIndex = -1;
             NewMeaning_btn.Text = "Add";
+            meaningsBindingSource.Filter = "Word_ID=" + Word_tbx.Tag.ToString() + "AND PoS_ID =" + PoS_cbx.SelectedValue.ToString();
+            Meanings_lbx.DataSource = meaningsBindingSource;
+            Meanings_lbx.DisplayMember = "Meaning";
+            Meanings_lbx.ValueMember = "ID";
+            Meanings_lbx.SelectedIndex = -1;
             
         }
 
@@ -1022,7 +1032,7 @@ namespace DataManger
                 Meanings_lbx.DataSource = meaningsBindingSource;
                 Meanings_lbx.DisplayMember = "Meaning";
                 Meanings_lbx.ValueMember = "ID";
-                Meanings_lbx.ClearSelected();
+                Meanings_lbx.SelectedIndex = -1;
 
                 Examples_lbx.DataSource = null;
                 Synonyms_lbx.DataSource = null;
@@ -1126,6 +1136,9 @@ namespace DataManger
                 NewExample_btn.Enabled = false;
                 NewSynonym_btn.Enabled = false;
                 NewAntonym_btn.Enabled = false;
+                Examples_lbx.DataSource = null;
+                Synonyms_lbx.DataSource = null;
+                Antonyms_lbx.DataSource = null;
             }
 
         }
