@@ -64,7 +64,6 @@ namespace DataManger
             //splitContainer1.Panel2Collapsed = true;
             //ShowHidePanel_btn.Text = ">>>";
             //this.ClientSize = new System.Drawing.Size(449, 800);
-
         }
 
         private void Word_tbx_TextChanged(object sender, EventArgs e)
