@@ -191,8 +191,6 @@
             // Words_lbx
             // 
             this.Words_lbx.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Words_lbx.DataSource = this.wordsSuggestBindingSource;
-            this.Words_lbx.DisplayMember = "Word";
             this.Words_lbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Words_lbx.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.Words_lbx.FormattingEnabled = true;
@@ -202,7 +200,6 @@
             this.Words_lbx.Name = "Words_lbx";
             this.Words_lbx.Size = new System.Drawing.Size(120, 82);
             this.Words_lbx.TabIndex = 1;
-            this.Words_lbx.ValueMember = "Word";
             this.Words_lbx.Visible = false;
             this.Words_lbx.SelectedIndexChanged += new System.EventHandler(this.Words_lbx_SelectedIndexChanged);
             // 
@@ -230,8 +227,6 @@
             // 
             // WordList_cbx
             // 
-            this.WordList_cbx.DataSource = this.wordListBindingSource;
-            this.WordList_cbx.DisplayMember = "ListName";
             this.WordList_cbx.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.WordList_cbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.WordList_cbx.FormattingEnabled = true;
@@ -239,7 +234,6 @@
             this.WordList_cbx.Name = "WordList_cbx";
             this.WordList_cbx.Size = new System.Drawing.Size(121, 28);
             this.WordList_cbx.TabIndex = 2;
-            this.WordList_cbx.ValueMember = "ID";
             this.WordList_cbx.SelectedIndexChanged += new System.EventHandler(this.WordList_cbx_SelectedIndexChanged);
             // 
             // wordListBindingSource
@@ -358,8 +352,6 @@
             // 
             // PoS_cbx
             // 
-            this.PoS_cbx.DataSource = this.poSBindingSource;
-            this.PoS_cbx.DisplayMember = "PoS";
             this.PoS_cbx.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.PoS_cbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PoS_cbx.FormattingEnabled = true;
@@ -367,7 +359,6 @@
             this.PoS_cbx.Name = "PoS_cbx";
             this.PoS_cbx.Size = new System.Drawing.Size(115, 28);
             this.PoS_cbx.TabIndex = 1;
-            this.PoS_cbx.ValueMember = "ID";
             this.PoS_cbx.SelectedIndexChanged += new System.EventHandler(this.PoS_cbx_SelectedIndexChanged);
             // 
             // poSBindingSource
@@ -377,15 +368,12 @@
             // 
             // Meanings_lbx
             // 
-            this.Meanings_lbx.DataSource = this.meaningsBindingSource;
-            this.Meanings_lbx.DisplayMember = "Meaning";
             this.Meanings_lbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Meanings_lbx.FormattingEnabled = true;
             this.Meanings_lbx.Location = new System.Drawing.Point(16, 201);
             this.Meanings_lbx.Name = "Meanings_lbx";
             this.Meanings_lbx.Size = new System.Drawing.Size(335, 69);
             this.Meanings_lbx.TabIndex = 7;
-            this.Meanings_lbx.ValueMember = "ID";
             this.Meanings_lbx.SelectedIndexChanged += new System.EventHandler(this.Meanings_lbx_SelectedIndexChanged);
             // 
             // meaningsBindingSource
@@ -667,8 +655,6 @@
             // 
             // srcAntonyms_lbx
             // 
-            this.srcAntonyms_lbx.DataSource = this.antonymsBindingSourceWWE;
-            this.srcAntonyms_lbx.DisplayMember = "Antonym";
             this.srcAntonyms_lbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.srcAntonyms_lbx.FormattingEnabled = true;
             this.srcAntonyms_lbx.HorizontalScrollbar = true;
@@ -677,7 +663,6 @@
             this.srcAntonyms_lbx.Name = "srcAntonyms_lbx";
             this.srcAntonyms_lbx.Size = new System.Drawing.Size(300, 184);
             this.srcAntonyms_lbx.TabIndex = 70;
-            this.srcAntonyms_lbx.ValueMember = "Antonym";
             this.srcAntonyms_lbx.SelectedIndexChanged += new System.EventHandler(this.srcAntonyms_lbx_SelectedIndexChanged);
             // 
             // antonymsBindingSourceWWE
@@ -752,8 +737,6 @@
             // 
             // srcExamples_lbx
             // 
-            this.srcExamples_lbx.DataSource = this.examplesBindingSourceWWE;
-            this.srcExamples_lbx.DisplayMember = "Example";
             this.srcExamples_lbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.srcExamples_lbx.FormattingEnabled = true;
             this.srcExamples_lbx.HorizontalScrollbar = true;
@@ -762,7 +745,6 @@
             this.srcExamples_lbx.Name = "srcExamples_lbx";
             this.srcExamples_lbx.Size = new System.Drawing.Size(702, 164);
             this.srcExamples_lbx.TabIndex = 64;
-            this.srcExamples_lbx.ValueMember = "Example";
             this.srcExamples_lbx.SelectedIndexChanged += new System.EventHandler(this.srcExamples_lbx_SelectedIndexChanged);
             // 
             // examplesBindingSourceWWE
@@ -772,8 +754,6 @@
             // 
             // srcMeanings_lbx
             // 
-            this.srcMeanings_lbx.DataSource = this.meaningsBindingSourceWWE;
-            this.srcMeanings_lbx.DisplayMember = "Meaning";
             this.srcMeanings_lbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.srcMeanings_lbx.FormattingEnabled = true;
             this.srcMeanings_lbx.HorizontalScrollbar = true;
@@ -782,7 +762,6 @@
             this.srcMeanings_lbx.Name = "srcMeanings_lbx";
             this.srcMeanings_lbx.Size = new System.Drawing.Size(702, 164);
             this.srcMeanings_lbx.TabIndex = 66;
-            this.srcMeanings_lbx.ValueMember = "Meaning";
             this.srcMeanings_lbx.SelectedIndexChanged += new System.EventHandler(this.sourceMeanings_lbx_SelectedIndexChanged);
             // 
             // meaningsBindingSourceWWE
@@ -792,8 +771,6 @@
             // 
             // srcPoS_cbx
             // 
-            this.srcPoS_cbx.DataSource = this.poSBindingSourceWWE;
-            this.srcPoS_cbx.DisplayMember = "PoS";
             this.srcPoS_cbx.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.srcPoS_cbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.srcPoS_cbx.FormattingEnabled = true;
@@ -801,7 +778,6 @@
             this.srcPoS_cbx.Name = "srcPoS_cbx";
             this.srcPoS_cbx.Size = new System.Drawing.Size(115, 28);
             this.srcPoS_cbx.TabIndex = 40;
-            this.srcPoS_cbx.ValueMember = "ID";
             this.srcPoS_cbx.SelectedIndexChanged += new System.EventHandler(this.srcPoS_cbx_SelectedIndexChanged);
             // 
             // poSBindingSourceWWE

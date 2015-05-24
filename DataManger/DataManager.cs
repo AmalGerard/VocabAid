@@ -52,14 +52,28 @@ namespace DataManger
             // TODO: This line of code loads data into the 'CurrentDataSet.Synonyms' table. You can move, or remove it, as needed.
             this.synonymsTableAdapter.Fill(this.CurrentDataSet.Synonyms);
             // TODO: This line of code loads data into the 'CurrentDataSet.Meanings' table. You can move, or remove it, as needed.
-            this.meaningsTableAdapter.Fill(this.CurrentDataSet.Meanings);
-            // TODO: This line of code loads data into the 'CurrentDataSet.Antonyms' table. You can move, or remove it, as needed.
             this.antonymsTableAdapter.Fill(this.CurrentDataSet.Antonyms);
             // TODO: This line of code loads data into the 'CurrentDataSet.PoS' table. You can move, or remove it, as needed.
             this.posTA.Fill(this.CurrentDataSet.PoS);
 
+            PoS_cbx.DisplayMember = "PoS";
+            PoS_cbx.ValueMember = "ID";
+            PoS_cbx.DataSource = this.poSBindingSource;
             PoS_cbx.SelectedIndex = -1;
-            Meanings_lbx.DataSource = null;
+
+            Words_lbx.DisplayMember = "Word";
+            Words_lbx.DataSource = this.wordsSuggestBindingSource;
+
+            WordList_cbx.DisplayMember = "ListName";
+            WordList_cbx.ValueMember = "ID";
+            WordList_cbx.DataSource = this.wordListBindingSource;
+            
+            srcPoS_cbx.DisplayMember = "PoS";
+            srcPoS_cbx.ValueMember = "ID";
+            srcPoS_cbx.DataSource = this.poSBindingSourceWWE;
+            //Meanings_lbx.DataSource = null;
+
+
 
             //splitContainer1.Panel2Collapsed = true;
             //ShowHidePanel_btn.Text = ">>>";
@@ -80,13 +94,15 @@ namespace DataManger
                 if (Convert.ToInt16(Words_lbx.Tag)!=1)
                 {
                     //Words_lbx.Visible = false;
+                    Words_lbx.DisplayMember = "Word";
                     wordsSuggestBindingSource.Filter = "Word Like '" + Word_tbx.Text + "%'";
+                    Words_lbx.DataSource = this.wordsSuggestBindingSource;
                     
                     //wordsSuggestBindingSource.Sort = "Word";
                     if (wordsSuggestBindingSource.Count == 0)
                     {
                         Words_lbx.Visible = false;
-                        Words_lbx.ClearSelected();
+                        Words_lbx.DataSource = null;
                         Word_tbx.Tag = null;
                     }
                     else
@@ -95,7 +111,11 @@ namespace DataManger
                         Words_lbx.Visible = true;
                         Words_lbx.Height = Words_lbx.Items.Count * 20 + 2;
                         Words_lbx.ClearSelected();
-                        Words_lbx.SelectedIndex = 0;
+                        if (Words_lbx.DataSource != null)
+                        {
+                           Words_lbx.SelectedIndex = 0; 
+                        }
+                        
                     }
                 }
                 else
@@ -109,6 +129,7 @@ namespace DataManger
                 Words_lbx.ClearSelected();
                 Word_tbx.Tag = null;
                 Words_lbx.Tag = null;
+                NewMeaning_btn.Enabled = false;
             }
         }
 
@@ -167,7 +188,7 @@ namespace DataManger
         }
 
         private void Words_lbx_SelectedIndexChanged(object sender, EventArgs e)
-        {
+       {
             if (Words_lbx.Visible == true & Words_lbx.SelectedIndex > -1)
             {
                 if (Word_tbx.Tag == null)
@@ -221,34 +242,12 @@ namespace DataManger
         private void retrieveWordData(string queryWord)
         {
             int index = wordsBindingSource.Find("Word", Word_tbx.Text);
-            //int _Word_ID = 0;
-            //int _WordList_ID = 0;
             if (index > -1)
             {
                 MainDBDataSet.WordsRow wordRow = (MainDBDataSet.WordsRow)CurrentDataSet.Words.Select("Word ='" + Word_tbx.Text + "'", "Word")[0];
                 Word_tbx.Tag = wordRow.ID;
                 Word_tbx.BackColor = Color.PaleTurquoise;
-               /* if (wordRow.HasMeaning == 1)
-                {
-                    Word_tbx.BackColor = Color.PaleTurquoise;
-                }
-                else
-                {
-                    Word_tbx.BackColor = Color.White;
-                }*/
             }
-            /*PoS_cbx.DataSource = null;
-            PoS_cbx.DataSource = poSBindingSource;
-            PoS_cbx.DisplayMember = "PoS";
-            PoS_cbx.ValueMember = "ID";
-            /*DataRow[] posRows = meaningsTableAdapter.GetData().Select("Word_ID=" + (long)Word_tbx.Tag, "Word_ID");
-            //int posID = (int)posTable.Rows[0]["Pos_ID"];
-            bool first = true;
-            foreach (DataRow posRow in posRows)
-            {
-                long pos = (long)posRow["PoS_ID"];
-                
-            }*/
         }
 
         private void ParseXML(string queryWord)
@@ -260,274 +259,295 @@ namespace DataManger
             srcAntonyms_lbx.HorizontalExtent = 700;
             string pos = "";
             WebClient wc = new WebClient();
-            String xml = wc.DownloadString("http://en.wiktionary.org/w/api.php?format=xml&action=query&titles="+queryWord+"&prop=extracts");
-            //XmlDocument xmlDoc = new XmlDocument();
-            //xmlDoc.Load("temp1.xml");
-            //int a = xml.IndexOf("<extract xml:space=\"preserve\">");
-            //xml = xml.Substring(0);
-            //xml = "@" + xml;
-            xml = xml.Replace("&lt;", "<");
-            xml = xml.Replace("&gt;", ">");
-            xml = xml.Replace("&quot;", "\"");
-            xml = xml.Replace("&amp;amp;", "&amp;");
-            xml = xml.Replace("<hr>","");
-            xml = xml.Replace("</hr>","");
-            xml = xml.Replace("<br>", "");
-            xml = xml.Replace("<h4>", "<h3>");
-            xml = xml.Replace("</h4>", "</h3>");
-            xml = xml.Replace("<h5>", "<h3>");
-            xml = xml.Replace("</h5>", "</h3>");
-            if (xml.Split(new string[] { "<h2>" }, StringSplitOptions.None).Length > 1)
+            try
             {
-                xml = "<api><query><pages><page><extract><h2>" + xml.Split(new string[] { "<h2>" }, StringSplitOptions.None)[1];
-                if (xml.Substring(xml.Length - 39, 39) != "</extract></page></pages></query></api>")
+                String xml = wc.DownloadString("http://en.wiktionary.org/w/api.php?format=xml&action=query&titles=" + queryWord + "&prop=extracts");
+                //XmlDocument xmlDoc = new XmlDocument();
+                //xmlDoc.Load("temp1.xml");
+                //int a = xml.IndexOf("<extract xml:space=\"preserve\">");
+                //xml = xml.Substring(0);
+                //xml = "@" + xml;
+                xml = xml.Replace("&lt;", "<");
+                xml = xml.Replace("&gt;", ">");
+                xml = xml.Replace("&quot;", "\"");
+                xml = xml.Replace("&amp;amp;", "&amp;");
+                xml = xml.Replace("<hr>", "");
+                xml = xml.Replace("</hr>", "");
+                xml = xml.Replace("<br>", "");
+                xml = xml.Replace("<h4>", "<h3>");
+                xml = xml.Replace("</h4>", "</h3>");
+                xml = xml.Replace("<h5>", "<h3>");
+                xml = xml.Replace("</h5>", "</h3>");
+                if (xml.Split(new string[] { "<h2>" }, StringSplitOptions.None).Length > 1)
                 {
-                    xml = xml + "</extract></page></pages></query></api>";
-                }
-                /*xml = xml.Replace("Adjective_2", "Adjective");
-                xml = xml.Replace("Adjective_3", "Adjective");
-                xml = xml.Replace("Verb_2", "Verb");
-                xml = xml.Replace("Verb_3", "Verb");
-                xml = xml.Replace("Noun_2", "Noun");
-                xml = xml.Replace("Noun_3", "Noun");
-                xml = xml.Replace("Adverb_2", "Adverb");
-                xml = xml.Replace("Adverb_3", "Adverb");*/
-                //xml = "<api><h2>" + splitxml[1] + "</api>";
-                XmlTextReader tempreader = new XmlTextReader(new StringReader(xml));
-                //using (XmlTextReader reader = new XmlTextReader(new StringReader(xml)))
-                //using (XmlTextReader reader = new XmlTextReader("temp.xml"))
-                //{
-                //XmlTextReader reader = new XmlTextReader("temp.xml");
-                tempreader.ReadToFollowing("api");
-                XmlReader reader = tempreader.ReadSubtree();
-                tempreader = null;
-                reader.ReadToFollowing("h2");
-                reader.ReadToFollowing("span");
-                reader.MoveToFirstAttribute();
-                if (reader.Value == "English")
-                {
-                    //Meaning_tbx.Enabled = false;
-                    //Example_tbx.Enabled = false;
-                    while (reader.ReadToFollowing("h3"))
+                    xml = "<api><query><pages><page><extract><h2>" + xml.Split(new string[] { "<h2>" }, StringSplitOptions.None)[1];
+                    if (xml.Substring(xml.Length - 39, 39) != "</extract></page></pages></query></api>")
                     {
-                        //reader.ReadToFollowing("h3");
-                        //reader.WhitespaceHandling = WhitespaceHandling.None;
-                        reader.ReadToFollowing("span");
-                        reader.MoveToFirstAttribute();
-                        string section = reader.Value.Split(new string[] { "_" }, StringSplitOptions.None)[0];
-                        if (section == "Adjective")
-                        {
-                            if (poSBindingSource.Filter != null)
-                            {
-                                poSBindingSource.Filter += " OR PoS='" + section + "'";
-                            }
-                            else
-                            {
-                                poSBindingSource.Filter += "PoS='" + section + "'";
-                            }
-                            readPoSContent(reader, section);
-                            pos = section;
-                        }
-                        else if (section == "Adverb")
-                        {
-                            if (poSBindingSource.Filter != null)
-                            {
-                                poSBindingSource.Filter += " OR PoS='" + section + "'";
-                            }
-                            else
-                            {
-                                poSBindingSource.Filter += "PoS='" + section + "'";
-                            }
-                            readPoSContent(reader, section);
-                            pos = section;
-                        }
-                        else if (section == "Conjunction")
-                        {
-                            if (poSBindingSource.Filter != null)
-                            {
-                                poSBindingSource.Filter += " OR PoS='" + section + "'";
-                            }
-                            else
-                            {
-                                poSBindingSource.Filter += "PoS='" + section + "'";
-                            }
-                            readPoSContent(reader, section);
-                            pos = section;
-                        }
-                        else if (section == "Interjection")
-                        {
-                            if (poSBindingSource.Filter != null)
-                            {
-                                poSBindingSource.Filter += " OR PoS='" + section + "'";
-                            }
-                            else
-                            {
-                                poSBindingSource.Filter += "PoS='" + section + "'";
-                            }
-                            readPoSContent(reader, section);
-                            pos = section;
-                        }
-                        else if (section == "Noun")
-                        {
-                            if (poSBindingSource.Filter != null)
-                            {
-                                poSBindingSource.Filter += " OR PoS='" + section + "'";
-                            }
-                            else
-                            {
-                                poSBindingSource.Filter += "PoS='" + section + "'";
-                            }
-                            readPoSContent(reader, section);
-                            pos = section;
-                        }
-                        else if (section == "Preposition")
-                        {
-                            if (poSBindingSource.Filter != null)
-                            {
-                                poSBindingSource.Filter += " OR PoS='" + section + "'";
-                            }
-                            else
-                            {
-                                poSBindingSource.Filter += "PoS='" + section + "'";
-                            }
-                            readPoSContent(reader, section);
-                            pos = section;
-                        }
-                        else if (section == "Pronoun")
-                        {
-                            if (poSBindingSource.Filter != null)
-                            {
-                                poSBindingSource.Filter += " OR PoS='" + section + "'";
-                            }
-                            else
-                            {
-                                poSBindingSource.Filter += "PoS='" + section + "'";
-                            }
-                            readPoSContent(reader, section);
-                            pos = section;
-                        }
-                        else if (section == "Verb")
-                        {
-                            if (poSBindingSource.Filter != null)
-                            {
-                                poSBindingSource.Filter += " OR PoS like '" + section + "%'";
-                            }
-                            else
-                            {
-                                poSBindingSource.Filter += "PoS Like '" + section + "%'";
-                            }
-                            readPoSContent(reader, section);
-                            pos = section;
-                        }
-                        else if (section == "Synonyms")
-                        {
-                            reader.ReadToFollowing("ul");
-                            XmlReader innerReader = reader.ReadSubtree();
-                            string tempSyn = "";
-                            while (innerReader.Read())
-                            {
-                                if (innerReader.NodeType == XmlNodeType.Text)
-                                {
-                                    tempSyn += innerReader.Value;
-                                }
-                                else if (innerReader.Name == "li" & !innerReader.IsStartElement())
-                                {
-                                    //srcSynonyms_lbx.Items.Add(tempSyn);
-                                    
-                                    srcPoS_cbx.SelectedIndex = srcPoS_cbx.FindString(pos);
-                                    WikiWordExtractsDataSet.SynonymsRow SynRow = wikiWordExtractsDataSet.Synonyms.NewSynonymsRow();
-                                    SynRow.Synonym = tempSyn;
-                                    SynRow.PoS_ID = Convert.ToInt64(srcPoS_cbx.SelectedValue);
-                                    wikiWordExtractsDataSet.Synonyms.AddSynonymsRow(SynRow);
-                                    synonymsTableAdapterWWE.Update(SynRow);
-                                    SynRow = null;
-                                    srcSynonyms_lbx.HorizontalExtent = 0;
-                                    tempSyn = "";
-                                }
-                            }
-                        }
-                        else if (section == "Antonyms")
-                        {
-                            reader.ReadToFollowing("ul");
-                            XmlReader innerReader = reader.ReadSubtree();
-                            string tempAnt = "";
-                            while (innerReader.Read())
-                            {
-                                if (innerReader.NodeType == XmlNodeType.Text)
-                                {
-                                    tempAnt += innerReader.Value;
-                                }
-                                else if (innerReader.Name == "li" & !innerReader.IsStartElement())
-                                {
-                                    //srcAntonyms_lbx.Items.Add(tempAnt);
-                                    srcPoS_cbx.SelectedIndex = srcPoS_cbx.FindString(pos);
-                                    WikiWordExtractsDataSet.AntonymsRow AntRow = wikiWordExtractsDataSet.Antonyms.NewAntonymsRow();
-                                    AntRow.Antonym = tempAnt;
-                                    AntRow.PoS_ID = Convert.ToInt64(srcPoS_cbx.SelectedValue);
-                                    wikiWordExtractsDataSet.Antonyms.AddAntonymsRow(AntRow);
-                                    antonymsTableAdapterWWE.Update(AntRow);
-                                    AntRow = null;
-                                    srcAntonyms_lbx.HorizontalExtent = 0;
-                                    tempAnt = "";
-                                }
-                            }
-                        }
+                        xml = xml + "</extract></page></pages></query></api>";
                     }
-                    //Meanings_lbx.Items.Add(reader.ReadElementContentAsString());
-                    //reader.ReadToDescendant("h3");
-                    //Meanings_lbx.Items.Add(reader.ReadElementContentAsString());
+                    /*xml = xml.Replace("Adjective_2", "Adjective");
+                    xml = xml.Replace("Adjective_3", "Adjective");
+                    xml = xml.Replace("Verb_2", "Verb");
+                    xml = xml.Replace("Verb_3", "Verb");
+                    xml = xml.Replace("Noun_2", "Noun");
+                    xml = xml.Replace("Noun_3", "Noun");
+                    xml = xml.Replace("Adverb_2", "Adverb");
+                    xml = xml.Replace("Adverb_3", "Adverb");*/
+                    //xml = "<api><h2>" + splitxml[1] + "</api>";
+                    XmlTextReader tempreader = new XmlTextReader(new StringReader(xml));
+                    //using (XmlTextReader reader = new XmlTextReader(new StringReader(xml)))
+                    //using (XmlTextReader reader = new XmlTextReader("temp.xml"))
+                    //{
+                    //XmlTextReader reader = new XmlTextReader("temp.xml");
+                    tempreader.ReadToFollowing("api");
+                    XmlReader reader = tempreader.ReadSubtree();
+                    tempreader = null;
+                    reader.ReadToFollowing("h2");
+                    reader.ReadToFollowing("span");
+                    reader.MoveToFirstAttribute();
+                    if (reader.Value == "English")
+                    {
+                        //Meaning_tbx.Enabled = false;
+                        //Example_tbx.Enabled = false;
+                        while (reader.ReadToFollowing("h3"))
+                        {
+                            //reader.ReadToFollowing("h3");
+                            //reader.WhitespaceHandling = WhitespaceHandling.None;
+                            reader.ReadToFollowing("span");
+                            reader.MoveToFirstAttribute();
+                            string section = reader.Value.Split(new string[] { "_" }, StringSplitOptions.None)[0];
+                            if (section == "Adjective")
+                            {
+                                if (poSBindingSource.Filter != null)
+                                {
+                                    poSBindingSource.Filter += " OR PoS='" + section + "'";
+                                }
+                                else
+                                {
+                                    poSBindingSource.Filter += "PoS='" + section + "'";
+                                }
+                                readPoSContent(reader, section);
+                                pos = section;
+                            }
+                            else if (section == "Adverb")
+                            {
+                                if (poSBindingSource.Filter != null)
+                                {
+                                    poSBindingSource.Filter += " OR PoS='" + section + "'";
+                                }
+                                else
+                                {
+                                    poSBindingSource.Filter += "PoS='" + section + "'";
+                                }
+                                readPoSContent(reader, section);
+                                pos = section;
+                            }
+                            else if (section == "Conjunction")
+                            {
+                                if (poSBindingSource.Filter != null)
+                                {
+                                    poSBindingSource.Filter += " OR PoS='" + section + "'";
+                                }
+                                else
+                                {
+                                    poSBindingSource.Filter += "PoS='" + section + "'";
+                                }
+                                readPoSContent(reader, section);
+                                pos = section;
+                            }
+                            else if (section == "Interjection")
+                            {
+                                if (poSBindingSource.Filter != null)
+                                {
+                                    poSBindingSource.Filter += " OR PoS='" + section + "'";
+                                }
+                                else
+                                {
+                                    poSBindingSource.Filter += "PoS='" + section + "'";
+                                }
+                                readPoSContent(reader, section);
+                                pos = section;
+                            }
+                            else if (section == "Noun")
+                            {
+                                if (poSBindingSource.Filter != null)
+                                {
+                                    poSBindingSource.Filter += " OR PoS='" + section + "'";
+                                }
+                                else
+                                {
+                                    poSBindingSource.Filter += "PoS='" + section + "'";
+                                }
+                                readPoSContent(reader, section);
+                                pos = section;
+                            }
+                            else if (section == "Preposition")
+                            {
+                                if (poSBindingSource.Filter != null)
+                                {
+                                    poSBindingSource.Filter += " OR PoS='" + section + "'";
+                                }
+                                else
+                                {
+                                    poSBindingSource.Filter += "PoS='" + section + "'";
+                                }
+                                readPoSContent(reader, section);
+                                pos = section;
+                            }
+                            else if (section == "Pronoun")
+                            {
+                                if (poSBindingSource.Filter != null)
+                                {
+                                    poSBindingSource.Filter += " OR PoS='" + section + "'";
+                                }
+                                else
+                                {
+                                    poSBindingSource.Filter += "PoS='" + section + "'";
+                                }
+                                readPoSContent(reader, section);
+                                pos = section;
+                            }
+                            else if (section == "Verb")
+                            {
+                                if (poSBindingSource.Filter != null)
+                                {
+                                    poSBindingSource.Filter += " OR PoS like '" + section + "%'";
+                                }
+                                else
+                                {
+                                    poSBindingSource.Filter += "PoS Like '" + section + "%'";
+                                }
+                                readPoSContent(reader, section);
+                                pos = section;
+                            }
+                            else if (section == "Synonyms")
+                            {
+                                reader.ReadToFollowing("ul");
+                                XmlReader innerReader = reader.ReadSubtree();
+                                string tempSyn = "";
+                                while (innerReader.Read())
+                                {
+                                    if (innerReader.NodeType == XmlNodeType.Text)
+                                    {
+                                        tempSyn += innerReader.Value;
+                                    }
+                                    else if (innerReader.Name == "li" & !innerReader.IsStartElement())
+                                    {
+                                        //srcSynonyms_lbx.Items.Add(tempSyn);
+                                        
+                                        srcPoS_cbx.SelectedIndex = srcPoS_cbx.FindString(pos);
+                                        srcSynonyms_lbx.DataSource = null;
+                                        WikiWordExtractsDataSet.SynonymsRow SynRow = wikiWordExtractsDataSet.Synonyms.NewSynonymsRow();
+                                        SynRow.Synonym = tempSyn;
+                                        SynRow.PoS_ID = Convert.ToInt64(srcPoS_cbx.SelectedValue);
+                                        wikiWordExtractsDataSet.Synonyms.AddSynonymsRow(SynRow);
+                                        synonymsTableAdapterWWE.Update(SynRow);
+                                        SynRow = null;
+                                        srcSynonyms_lbx.HorizontalExtent = 0;
+                                        tempSyn = "";
+                                    }
+                                }
+                            }
+                            else if (section == "Antonyms")
+                            {
+                                reader.ReadToFollowing("ul");
+                                XmlReader innerReader = reader.ReadSubtree();
+                                string tempAnt = "";
+                                while (innerReader.Read())
+                                {
+                                    if (innerReader.NodeType == XmlNodeType.Text)
+                                    {
+                                        tempAnt += innerReader.Value;
+                                    }
+                                    else if (innerReader.Name == "li" & !innerReader.IsStartElement())
+                                    {
+                                        //srcAntonyms_lbx.Items.Add(tempAnt);
+                                        
+                                        srcPoS_cbx.SelectedIndex = srcPoS_cbx.FindString(pos);
+                                        srcAntonyms_lbx.DataSource = null;
+                                        WikiWordExtractsDataSet.AntonymsRow AntRow = wikiWordExtractsDataSet.Antonyms.NewAntonymsRow();
+                                        AntRow.Antonym = tempAnt;
+                                        AntRow.PoS_ID = Convert.ToInt64(srcPoS_cbx.SelectedValue);
+                                        wikiWordExtractsDataSet.Antonyms.AddAntonymsRow(AntRow);
+                                        antonymsTableAdapterWWE.Update(AntRow);
+                                        AntRow = null;
+                                        srcAntonyms_lbx.HorizontalExtent = 0;
+                                        tempAnt = "";
+                                    }
+                                }
+                            }
+                        }
+                        //Meanings_lbx.Items.Add(reader.ReadElementContentAsString());
+                        //reader.ReadToDescendant("h3");
+                        //Meanings_lbx.Items.Add(reader.ReadElementContentAsString());
 
-                    //}
-                    //XmlDocument xmlDoc = new XmlDocument();
-                    //xmlDoc.LoadXml(xml);
-                    //srcMeanings_lbx.Tag = null;
-                    //srcExamples_lbx.Tag = null;
+                        //}
+                        //XmlDocument xmlDoc = new XmlDocument();
+                        //xmlDoc.LoadXml(xml);
+                        //srcMeanings_lbx.Tag = null;
+                        //srcExamples_lbx.Tag = null;
 
-                    //Meaning_tbx.Enabled = true;
-                    //Example_tbx.Enabled = true;
+                        //Meaning_tbx.Enabled = true;
+                        //Example_tbx.Enabled = true;
+                    }
+                    webBrowser1.Navigate("http://en.wiktionary.org/w/index.php?title=" + queryWord + "&printable=yes#English");
                 }
-                webBrowser1.Navigate("http://en.wiktionary.org/w/index.php?title=" + queryWord + "&printable=yes#English");
+                //srcPoS_cbx.DataSource = poSBindingSourceWWE;
+                //srcPoS_cbx.DisplayMember = "PoS";
+                //srcPoS_cbx.ValueMember = "ID";
+                if (srcPoS_cbx.Items.Count > 0)
+                {
+                    srcPoS_cbx.SelectedIndex = -1;
+                    srcPoS_cbx.SelectedIndex = 0;
+                }
+                
+                srcMeanings_lbx.DisplayMember = "Meaning";
+                srcMeanings_lbx.ValueMember = "Meaning";
+                srcMeanings_lbx.DataSource = meaningsBindingSourceWWE;
+                srcMeanings_lbx.ClearSelected();
+                
+                srcExamples_lbx.DisplayMember = "Example";
+                srcExamples_lbx.ValueMember = "Example";
+                srcExamples_lbx.DataSource = examplesBindingSourceWWE;
+                srcExamples_lbx.ClearSelected();
+                
+                srcSynonyms_lbx.DisplayMember = "Synonym";
+                srcSynonyms_lbx.ValueMember = "Synonym";
+                srcSynonyms_lbx.DataSource = synonymsBindingSourceWWE;
+                srcSynonyms_lbx.ClearSelected();
+                
+                srcAntonyms_lbx.DisplayMember = "Antonym";
+                srcAntonyms_lbx.ValueMember = "Antonym";
+                srcAntonyms_lbx.DataSource = antonymsBindingSourceWWE;
+                srcAntonyms_lbx.ClearSelected();
+
+                srcMeanings_lbx.HorizontalExtent = 0;
+                srcExamples_lbx.HorizontalExtent = 0;
+                srcSynonyms_lbx.HorizontalExtent = 0;
+                srcAntonyms_lbx.HorizontalExtent = 0;
+                PoS_cbx.SelectedIndex = -1;
             }
-            //srcPoS_cbx.DataSource = poSBindingSourceWWE;
-            //srcPoS_cbx.DisplayMember = "PoS";
-            //srcPoS_cbx.ValueMember = "ID";
-            if (srcPoS_cbx.Items.Count > 0)
+            catch (Exception e)
             {
-                srcPoS_cbx.SelectedIndex = 0;
+                MessageBox.Show("Check you internet connection. " + e.Message, "Unable to download", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            srcMeanings_lbx.DataSource = meaningsBindingSourceWWE;
-            srcMeanings_lbx.DisplayMember = "Meaning";
-            srcMeanings_lbx.ValueMember = "Meaning";
-            srcMeanings_lbx.ClearSelected();
-            srcExamples_lbx.DataSource = examplesBindingSourceWWE;
-            srcExamples_lbx.DisplayMember = "Example";
-            srcExamples_lbx.ValueMember = "Example";
-            srcExamples_lbx.ClearSelected();
-            srcSynonyms_lbx.DataSource = synonymsBindingSourceWWE;
-            srcSynonyms_lbx.DisplayMember = "Synonym";
-            srcSynonyms_lbx.ValueMember = "Synonym";
-            srcSynonyms_lbx.ClearSelected();
-            srcAntonyms_lbx.DataSource = antonymsBindingSourceWWE;
-            srcAntonyms_lbx.DisplayMember = "Antonym";
-            srcAntonyms_lbx.ValueMember = "Antonym";
-            srcAntonyms_lbx.ClearSelected();
-            srcMeanings_lbx.HorizontalExtent = 0;
-            srcExamples_lbx.HorizontalExtent = 0;
-            srcSynonyms_lbx.HorizontalExtent = 0;
-            srcAntonyms_lbx.HorizontalExtent = 0;
-            PoS_cbx.SelectedIndex = -1;
         }
+
         private void readPoSContent(XmlReader reader, string pos)
         {
             int index = poSBindingSourceWWE.Find("PoS", pos);
             long posID = 1;
             if (index == -1)
             {
+                srcPoS_cbx.DataSource = null;
                 WikiWordExtractsDataSet.PoSRow _PoSRow = wikiWordExtractsDataSet.PoS.NewPoSRow();
                 _PoSRow.PoS = pos;
                 wikiWordExtractsDataSet.PoS.AddPoSRow(_PoSRow);
                 posTableAdapterWWE.Update(_PoSRow);
                 posID = _PoSRow.ID;
+                srcPoS_cbx.DisplayMember = "PoS";
+                srcPoS_cbx.ValueMember = "ID";
+                srcPoS_cbx.DataSource = this.poSBindingSourceWWE;
             }
             else
             {
@@ -868,9 +888,9 @@ namespace DataManger
             Meaning_tbx.Text = "";
             NewMeaning_btn.Text = "Add";
             meaningsBindingSource.Filter = "Word_ID=" + Word_tbx.Tag.ToString() + "AND PoS_ID =" + PoS_cbx.SelectedValue.ToString();
-            Meanings_lbx.DataSource = meaningsBindingSource;
             Meanings_lbx.DisplayMember = "Meaning";
             Meanings_lbx.ValueMember = "ID";
+            Meanings_lbx.DataSource = meaningsBindingSource;
             Meanings_lbx.SelectedIndex = -1;
             
         }
@@ -882,16 +902,37 @@ namespace DataManger
 
         private void srcPoS_cbx_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (srcPoS_cbx.SelectedIndex > -1)
+            if (srcPoS_cbx.SelectedIndex > -1 & Environment.StackTrace.IndexOf("readPoSContent") == -1)
             {
+                srcMeanings_lbx.DataSource = null;
+                srcExamples_lbx.DataSource = null;
+                srcSynonyms_lbx.DataSource = null;
+                srcAntonyms_lbx.DataSource = null;
+
                 meaningsBindingSourceWWE.Filter = "PoS_ID = " + srcPoS_cbx.SelectedValue;
                 examplesBindingSourceWWE.Filter = "PoS_ID = " + srcPoS_cbx.SelectedValue;
                 synonymsBindingSourceWWE.Filter = "PoS_ID = " + srcPoS_cbx.SelectedValue;
                 antonymsBindingSourceWWE.Filter = "PoS_ID = " + srcPoS_cbx.SelectedValue;
-                srcSynonyms_lbx.ClearSelected();
-                srcAntonyms_lbx.ClearSelected();
+                
+                srcMeanings_lbx.DisplayMember = "Meaning";
+                srcMeanings_lbx.ValueMember = "Meaning";
+                srcMeanings_lbx.DataSource = meaningsBindingSourceWWE;
                 srcMeanings_lbx.ClearSelected();
+                
+                srcExamples_lbx.DisplayMember = "Example";
+                srcExamples_lbx.ValueMember = "Example";
+                srcExamples_lbx.DataSource = examplesBindingSourceWWE;
                 srcExamples_lbx.ClearSelected();
+                
+                srcSynonyms_lbx.DisplayMember = "Synonym";
+                srcSynonyms_lbx.ValueMember = "Synonym";
+                srcSynonyms_lbx.DataSource = synonymsBindingSourceWWE;
+                srcSynonyms_lbx.ClearSelected();
+                
+                srcAntonyms_lbx.DisplayMember = "Antonym";
+                srcAntonyms_lbx.ValueMember = "Antonym";
+                srcAntonyms_lbx.DataSource = antonymsBindingSourceWWE;
+                srcAntonyms_lbx.ClearSelected();
             }
         }
 
@@ -921,7 +962,7 @@ namespace DataManger
 
         private void Meaning_tbx_TextChanged(object sender, EventArgs e)
         {
-            if (Meaning_tbx.Text != "" & PoS_cbx.SelectedIndex > -1)
+            if (Meaning_tbx.Text != "" & PoS_cbx.SelectedIndex > -1 & Word_tbx.Text != "")
             {
                 if (WordList_cbx.SelectedIndex == 0 & NewWordList_tbx.Text != "")
                 {
@@ -998,11 +1039,6 @@ namespace DataManger
             }
         }
 
-        private void AddWord_btn_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void PoS_cbx_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (Meaning_tbx.Text != "" & PoS_cbx.SelectedIndex > 0)
@@ -1027,15 +1063,22 @@ namespace DataManger
             }
             if (Word_tbx.Tag != null & PoS_cbx.SelectedIndex > -1)
             {
-                meaningsBindingSource.Filter = "Word_ID=" + Word_tbx.Tag.ToString() + "AND PoS_ID =" + PoS_cbx.SelectedValue.ToString();
-                Meanings_lbx.DataSource = meaningsBindingSource;
-                Meanings_lbx.DisplayMember = "Meaning";
-                Meanings_lbx.ValueMember = "ID";
-                Meanings_lbx.SelectedIndex = -1;
-
                 Examples_lbx.DataSource = null;
                 Synonyms_lbx.DataSource = null;
                 Antonyms_lbx.DataSource = null;
+                Meanings_lbx.DataSource = null;
+
+                Meanings_lbx.ValueMember = "ID";
+                Meanings_lbx.DisplayMember = "Meaning";
+                meaningsBindingSource.Filter = "Word_ID=" + Word_tbx.Tag.ToString() + "AND PoS_ID =" + PoS_cbx.SelectedValue.ToString();
+                Meanings_lbx.DataSource = meaningsBindingSource;
+                Meanings_lbx.SelectedIndex = -1;
+                if (meaningsBindingSource.Count == 0)
+                {
+                    Meanings_lbx.DataSource = null;
+                }
+
+
             }
         }
 
@@ -1078,16 +1121,75 @@ namespace DataManger
             DialogResult result = MessageBox.Show("Do you want to delete this meaning?", "Confirm Delete", MessageBoxButtons.OKCancel);
             if (result == DialogResult.OK)
             {
+                System.Data.DataRow[] ExRows = CurrentDataSet.Examples.Select("Meaning_ID =" + Meanings_lbx.SelectedValue.ToString());
+                if (ExRows != null)
+                {
+                    foreach (MainDBDataSet.ExamplesRow ExRow in ExRows)
+                    {
+                        ExRow.Delete();
+                        examplesTableAdapter.Update(CurrentDataSet);
+                    }
+                    ExRows = null;
+                }
+
+                System.Data.DataRow[] SynRows = CurrentDataSet.Synonyms.Select("Meaning_ID =" + Meanings_lbx.SelectedValue.ToString());
+                if (SynRows != null)
+                {
+                    foreach (MainDBDataSet.SynonymsRow SynRow in SynRows)
+                    {
+                        SynRow.Delete();
+                        synonymsTableAdapter.Update(CurrentDataSet);
+                    }
+                    SynRows = null;
+                }
+
+                System.Data.DataRow[] AntRows = CurrentDataSet.Antonyms.Select("Meaning_ID =" + Meanings_lbx.SelectedValue.ToString());
+                if (AntRows != null)
+                {
+                    foreach (MainDBDataSet.AntonymsRow AntRow in AntRows)
+                    {
+                        AntRow.Delete();
+                        antonymsTableAdapter.Update(CurrentDataSet);
+                    }
+                    AntRows = null;
+                }
+
                 MainDBDataSet.MeaningsRow MeanRow = CurrentDataSet.Meanings.FindByID((long)Meanings_lbx.SelectedValue);
+
+                long wordID = -1;
+                bool lastMeaning = false;
+                
+                if (CurrentDataSet.Meanings.Select("Word_ID =" + MeanRow.Word_ID).Count() == 1)
+                {
+                    lastMeaning = true;
+                    wordID = MeanRow.Word_ID;
+                }
+
                 MeanRow.Delete();
                 meaningsTableAdapter.Update(CurrentDataSet);
                 Meanings_lbx.SelectedIndex = -1;
+                MeanRow = null;
+
+                if (lastMeaning)
+                {
+                    MainDBDataSet.WordsRow WordRow = CurrentDataSet.Words.FindByID(wordID);
+                    WordRow.Delete();
+                    wordsTableAdapter.Update(CurrentDataSet);
+                    WordRow = null;
+                    Word_tbx.BackColor = Color.White;
+                }
+                Meaning_tbx.Focus();
+                
             }
         }
 
         private void Meanings_lbx_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (Meanings_lbx.SelectedIndex > -1)
+            Examples_lbx.DataSource = null;
+            Synonyms_lbx.DataSource = null;
+            Antonyms_lbx.DataSource = null;
+            //int temp = Environment.StackTrace.IndexOf("PoS_cbx_SelectedIndexChanged");
+            if (Meanings_lbx.SelectedIndex > -1 & Environment.StackTrace.IndexOf("PoS_cbx_SelectedIndexChanged") == -1)
             {
                 EditMeaning_btn.Enabled = true;
                 DelMeaning_btn.Enabled = true;
@@ -1095,23 +1197,35 @@ namespace DataManger
                 WordList_cbx.SelectedValue = MeanRow.WList_ID;
                 MeanRow = null;
 
-                examplesBindingSource.Filter = "Meaning_ID =" + (long)Meanings_lbx.SelectedValue;
-                Examples_lbx.DataSource = examplesBindingSource;
                 Examples_lbx.DisplayMember = "Example";
                 Examples_lbx.ValueMember = "ID";
+                examplesBindingSource.Filter = "Meaning_ID =" + (long)Meanings_lbx.SelectedValue;
+                Examples_lbx.DataSource = examplesBindingSource;
                 Examples_lbx.SelectedIndex = -1;
+                if (examplesBindingSource.Count == 0)
+                {
+                    Examples_lbx.DataSource = null;
+                }
 
-                synonymsBindingSource.Filter = "Meaning_ID =" + (long)Meanings_lbx.SelectedValue;
-                Synonyms_lbx.DataSource = synonymsBindingSource;
                 Synonyms_lbx.DisplayMember = "Synonym";
                 Synonyms_lbx.ValueMember = "ID";
+                synonymsBindingSource.Filter = "Meaning_ID =" + (long)Meanings_lbx.SelectedValue;
+                Synonyms_lbx.DataSource = synonymsBindingSource;
                 Synonyms_lbx.SelectedIndex = -1;
+                if (synonymsBindingSource.Count == 0)
+                {
+                    Synonyms_lbx.DataSource = null;
+                }
 
-                antonymsBindingSource.Filter = "Meaning_ID =" + (long)Meanings_lbx.SelectedValue;
-                Antonyms_lbx.DataSource = antonymsBindingSource;
                 Antonyms_lbx.DisplayMember = "Antonym";
                 Antonyms_lbx.ValueMember = "ID";
+                antonymsBindingSource.Filter = "Meaning_ID =" + (long)Meanings_lbx.SelectedValue;
+                Antonyms_lbx.DataSource = antonymsBindingSource;
                 Antonyms_lbx.SelectedIndex = -1;
+                if (antonymsBindingSource.Count == 0)
+                {
+                    Antonyms_lbx.DataSource = null;
+                }
 
                 if (Example_tbx.Text != "")
                 {
@@ -1135,9 +1249,6 @@ namespace DataManger
                 NewExample_btn.Enabled = false;
                 NewSynonym_btn.Enabled = false;
                 NewAntonym_btn.Enabled = false;
-                Examples_lbx.DataSource = null;
-                Synonyms_lbx.DataSource = null;
-                Antonyms_lbx.DataSource = null;
             }
 
         }
@@ -1170,6 +1281,10 @@ namespace DataManger
                 CurrentDataSet.Examples.AddExamplesRow(ExRow);
                 examplesTableAdapter.Update(ExRow);
                 ExRow = null;
+                Examples_lbx.DisplayMember = "Example";
+                Examples_lbx.ValueMember = "ID";
+                examplesBindingSource.Filter = "Meaning_ID =" + (long)Meanings_lbx.SelectedValue;
+                Examples_lbx.DataSource = examplesBindingSource;
             }
             Example_tbx.Text = "";
             Examples_lbx.SelectedIndex = -1;
@@ -1232,7 +1347,10 @@ namespace DataManger
                 CurrentDataSet.Synonyms.AddSynonymsRow(SynRow);
                 synonymsTableAdapter.Update(SynRow);
                 SynRow = null;
-                
+                Synonyms_lbx.DisplayMember = "Synonym";
+                Synonyms_lbx.ValueMember = "ID";
+                synonymsBindingSource.Filter = "Meaning_ID =" + (long)Meanings_lbx.SelectedValue;
+                Synonyms_lbx.DataSource = synonymsBindingSource;
             }
             NewSynonym_btn.Text = "Add";
             Synonym_tbx.Text = "";
@@ -1280,7 +1398,10 @@ namespace DataManger
                 CurrentDataSet.Antonyms.AddAntonymsRow(AntRow);
                 antonymsTableAdapter.Update(AntRow);
                 AntRow = null;
-
+                Antonyms_lbx.DisplayMember = "Antonym";
+                Antonyms_lbx.ValueMember = "ID";
+                antonymsBindingSource.Filter = "Meaning_ID =" + (long)Meanings_lbx.SelectedValue;
+                Antonyms_lbx.DataSource = antonymsBindingSource;
             }
             NewAntonym_btn.Text = "Add";
             Antonym_tbx.Text = "";
