@@ -1,0 +1,23 @@
+﻿<Page
+    x:Class="VocabAid_WP.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VocabAid_WP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel x:Name="Title_stk" Grid.Row="0" Margin="30, 30, 20, 20">
+            <TextBlock x:Name="AppName_tbk" Text="Vocab Aid" Style="{StaticResource HeaderTextBlockStyle}" />
+            <TextBlock x:Name="Action_tbk" Text="Pick a word list" Style="{StaticResource SubheaderTextBlockStyle}" Margin="30,20,0,0"/>
+        </StackPanel>
+        <Grid x:Name="Content_grd" Grid.Row="1" Margin="30,0,20,20">
+
+        </Grid>
+    </Grid>
+</Page>

@@ -1,0 +1,27 @@
+﻿<Page
+    x:Class="VocabAid_WP.ActivitiesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VocabAid_WP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:VocabAid_WP.ViewModels"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <DataTemplate x:Name="WordList">
+            <TextBlock Text="{Binding Word}"></TextBlock>
+        </DataTemplate>
+    </Page.Resources>
+    
+    <Grid>
+        <Pivot Title="Vocab Aid"> 
+            <PivotItem x:Name="Learn_PI" Header="Learn">
+                <ListView x:Name="LearnWords_lv" ItemTemplate="{StaticResource WordList}"></ListView>
+            </PivotItem>
+            <PivotItem x:Name="Review_PI" Header="Review"></PivotItem>
+            <PivotItem x:Name="Test_PI" Header="Test"></PivotItem>
+        </Pivot>
+    </Grid>
+</Page>
