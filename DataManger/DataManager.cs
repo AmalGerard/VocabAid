@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Xml;
 using System.IO;
-using System.Data.SQLite;
 
 namespace DataManger
 {
@@ -422,57 +416,61 @@ namespace DataManger
                             }
                             else if (section == "Synonyms")
                             {
-                                reader.ReadToFollowing("ul");
-                                XmlReader innerReader = reader.ReadSubtree();
-                                string tempSyn = "";
-                                while (innerReader.Read())
+                                if (reader.ReadToFollowing("ul"))
                                 {
-                                    if (innerReader.NodeType == XmlNodeType.Text)
+                                    XmlReader innerReader = reader.ReadSubtree();
+                                    string tempSyn = "";
+                                    while (innerReader.Read())
                                     {
-                                        tempSyn += innerReader.Value;
-                                    }
-                                    else if (innerReader.Name == "li" & !innerReader.IsStartElement())
-                                    {
-                                        //srcSynonyms_lbx.Items.Add(tempSyn);
-                                        
-                                        srcPoS_cbx.SelectedIndex = srcPoS_cbx.FindString(pos);
-                                        srcSynonyms_lbx.DataSource = null;
-                                        WikiWordExtractsDataSet.SynonymsRow SynRow = wikiWordExtractsDataSet.Synonyms.NewSynonymsRow();
-                                        SynRow.Synonym = tempSyn;
-                                        SynRow.PoS_ID = Convert.ToInt64(srcPoS_cbx.SelectedValue);
-                                        wikiWordExtractsDataSet.Synonyms.AddSynonymsRow(SynRow);
-                                        synonymsTableAdapterWWE.Update(SynRow);
-                                        SynRow = null;
-                                        srcSynonyms_lbx.HorizontalExtent = 0;
-                                        tempSyn = "";
+                                        if (innerReader.NodeType == XmlNodeType.Text)
+                                        {
+                                            tempSyn += innerReader.Value;
+                                        }
+                                        else if (innerReader.Name == "li" & !innerReader.IsStartElement())
+                                        {
+                                            //srcSynonyms_lbx.Items.Add(tempSyn);
+
+                                            srcPoS_cbx.SelectedIndex = srcPoS_cbx.FindString(pos);
+                                            srcSynonyms_lbx.DataSource = null;
+                                            WikiWordExtractsDataSet.SynonymsRow SynRow = wikiWordExtractsDataSet.Synonyms.NewSynonymsRow();
+                                            SynRow.Synonym = tempSyn;
+                                            SynRow.PoS_ID = Convert.ToInt64(srcPoS_cbx.SelectedValue);
+                                            wikiWordExtractsDataSet.Synonyms.AddSynonymsRow(SynRow);
+                                            synonymsTableAdapterWWE.Update(SynRow);
+                                            SynRow = null;
+                                            srcSynonyms_lbx.HorizontalExtent = 0;
+                                            tempSyn = "";
+                                        }
                                     }
                                 }
                             }
                             else if (section == "Antonyms")
                             {
-                                reader.ReadToFollowing("ul");
-                                XmlReader innerReader = reader.ReadSubtree();
-                                string tempAnt = "";
-                                while (innerReader.Read())
+                                if (reader.ReadToFollowing("ul"))
                                 {
-                                    if (innerReader.NodeType == XmlNodeType.Text)
+                                    XmlReader innerReader = reader.ReadSubtree();
+                                    string tempAnt = "";
+                                    while (innerReader.Read())
                                     {
-                                        tempAnt += innerReader.Value;
-                                    }
-                                    else if (innerReader.Name == "li" & !innerReader.IsStartElement())
-                                    {
-                                        //srcAntonyms_lbx.Items.Add(tempAnt);
-                                        
-                                        srcPoS_cbx.SelectedIndex = srcPoS_cbx.FindString(pos);
-                                        srcAntonyms_lbx.DataSource = null;
-                                        WikiWordExtractsDataSet.AntonymsRow AntRow = wikiWordExtractsDataSet.Antonyms.NewAntonymsRow();
-                                        AntRow.Antonym = tempAnt;
-                                        AntRow.PoS_ID = Convert.ToInt64(srcPoS_cbx.SelectedValue);
-                                        wikiWordExtractsDataSet.Antonyms.AddAntonymsRow(AntRow);
-                                        antonymsTableAdapterWWE.Update(AntRow);
-                                        AntRow = null;
-                                        srcAntonyms_lbx.HorizontalExtent = 0;
-                                        tempAnt = "";
+                                        if (innerReader.NodeType == XmlNodeType.Text)
+                                        {
+                                            tempAnt += innerReader.Value;
+                                        }
+                                        else if (innerReader.Name == "li" & !innerReader.IsStartElement())
+                                        {
+                                            //srcAntonyms_lbx.Items.Add(tempAnt);
+
+                                            srcPoS_cbx.SelectedIndex = srcPoS_cbx.FindString(pos);
+                                            srcAntonyms_lbx.DataSource = null;
+                                            WikiWordExtractsDataSet.AntonymsRow AntRow = wikiWordExtractsDataSet.Antonyms.NewAntonymsRow();
+                                            AntRow.Antonym = tempAnt;
+                                            AntRow.PoS_ID = Convert.ToInt64(srcPoS_cbx.SelectedValue);
+                                            wikiWordExtractsDataSet.Antonyms.AddAntonymsRow(AntRow);
+                                            antonymsTableAdapterWWE.Update(AntRow);
+                                            AntRow = null;
+                                            srcAntonyms_lbx.HorizontalExtent = 0;
+                                            tempAnt = "";
+                                        }
                                     }
                                 }
                             }
